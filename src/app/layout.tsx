@@ -1,10 +1,16 @@
 import React from 'react';
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
   title: 'GATE DA 2027 Master Tracker — 45+ Marks Blueprint (MongoDB Connected)',
   description: 'Next.js 16 + TypeScript + MongoDB powered study tracker, 7-hour daily routine logger, and mistake notebook for GATE Data Science & AI 2027.',
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
 };
 
 export default function RootLayout({

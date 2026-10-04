@@ -57,9 +57,39 @@ export default function GateTrackerApp() {
     showToast(`Switched theme: ${themeNames[theme]}`, 'info');
   };
 
+  // --- Dynamic Today Calculation ---
+  const getTodayId = (): string => {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    const dateStr = `${year}-${month}-${day}`;
+    if (MASTER_SCHEDULE.some((item) => item.id === dateStr)) {
+      return dateStr;
+    }
+    return MASTER_SCHEDULE[0].id; // Defaults to starting day (2026-10-04)
+  };
+
+  const actualTodayId = useMemo(() => getTodayId(), []);
+
   // --- State ---
   const [activeTab, setActiveTab] = useState<string>('tab-schedule');
-  const [currentDayId, setCurrentDayId] = useState<string>('2026-10-04'); // Starting day
+  const [currentDayId, setCurrentDayId] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('gate2027_active_day');
+        if (saved && MASTER_SCHEDULE.some((d) => d.id === saved)) {
+          return saved;
+        }
+      } catch (e) {}
+    }
+    return getTodayId();
+  });
+
+  const [isTodaySpotlightCollapsed, setIsTodaySpotlightCollapsed] = useState<boolean>(false);
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState<boolean>(false);
+  const [showScrollToTopFab, setShowScrollToTopFab] = useState<boolean>(false);
+
   const [mongoStatus, setMongoStatus] = useState<'connecting' | 'connected' | 'error'>('connecting');
   const [mongoDbName, setMongoDbName] = useState<string>('gate2027');
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
@@ -74,6 +104,19 @@ export default function GateTrackerApp() {
   const [selectedMonth, setSelectedMonth] = useState<string>('all');
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
   const [selectedTier, setSelectedTier] = useState<string>('all');
+
+  // Track scroll position for mobile Floating Action Button
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 350) {
+        setShowScrollToTopFab(true);
+      } else {
+        setShowScrollToTopFab(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Modal States
   const [editingDayId, setEditingDayId] = useState<string | null>(null);
@@ -255,9 +298,18 @@ export default function GateTrackerApp() {
     const subTasks = { ...(current.subTasks || {}) };
     subTasks[subKey] = isChecked;
 
-    const values = Object.values(subTasks);
-    const allChecked = values.length > 0 && values.every((v) => v === true);
-    const someChecked = values.some((v) => v === true);
+    const targetDay = MASTER_SCHEDULE.find((d) => d.id === dayId);
+    const allDaySubtasks =
+      targetDay?.defaultTasks ||
+      (targetDay?.isSunday ? STUDY_STRUCTURE.sunday : STUDY_STRUCTURE.weekday);
+
+    const checkedCount = allDaySubtasks.filter((t) => {
+      const k = ('id' in t && t.id) || ('key' in t && t.key) || '';
+      return subTasks[k] === true;
+    }).length;
+
+    const allChecked = allDaySubtasks.length > 0 && checkedCount === allDaySubtasks.length;
+    const someChecked = checkedCount > 0;
 
     let status = current.status || 'pending';
     let completed = current.completed || false;
@@ -267,6 +319,9 @@ export default function GateTrackerApp() {
       completed = true;
     } else if (someChecked) {
       status = 'in-progress';
+      completed = false;
+    } else {
+      status = 'pending';
       completed = false;
     }
 
@@ -564,23 +619,59 @@ export default function GateTrackerApp() {
     e.target.value = '';
   };
 
-  // Scroll to today's card
+  // Select active day
+  const handleSelectDay = (dayId: string) => {
+    setCurrentDayId(dayId);
+    try {
+      localStorage.setItem('gate2027_active_day', dayId);
+    } catch (e) {}
+  };
+
+  // Toggle master day complete directly (e.g. from Today's Task spotlight)
+  const handleToggleDayCompleteDirect = (dayId: string) => {
+    const current = daysData[dayId] || {
+      dayId,
+      completed: false,
+      status: 'pending',
+      notes: '',
+      links: [],
+      subTasks: {},
+      hoursLogged: 0,
+    };
+    const isNowCompleted = !current.completed;
+    const updated: DayProgressData = {
+      ...current,
+      dayId,
+      completed: isNowCompleted,
+      status: isNowCompleted ? 'completed' : 'pending',
+    };
+
+    setDaysData((prev) => ({ ...prev, [dayId]: updated }));
+    persistDayToMongo(dayId, updated);
+
+    if (isNowCompleted) {
+      playChime();
+      confetti({ particleCount: 75, spread: 70, origin: { y: 0.6 } });
+      showToast(`Completed day ${dayId}! Great discipline!`, 'success');
+    } else {
+      showToast(`Marked day ${dayId} as pending`, 'info');
+    }
+  };
+
+  // Scroll to today's task spotlight at top
   const handleScrollToToday = () => {
     setActiveTab('tab-schedule');
-    setSelectedMonth('all');
-    setSelectedStatus('all');
-    setSelectedTier('all');
-    setSearchQuery('');
+    handleSelectDay(actualTodayId);
     setTimeout(() => {
-      const card = document.getElementById(`card-${currentDayId}`);
-      if (card) {
-        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        card.style.boxShadow = '0 0 25px rgba(99, 102, 241, 0.6)';
+      const spotlight = document.getElementById('today-spotlight-card');
+      if (spotlight) {
+        spotlight.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        spotlight.classList.add('spotlight-pulse-highlight');
         setTimeout(() => {
-          card.style.boxShadow = '';
-        }, 1800);
+          spotlight.classList.remove('spotlight-pulse-highlight');
+        }, 1500);
       }
-    }, 150);
+    }, 100);
   };
 
   // Countdown to Exam (Feb 6, 2027)
@@ -710,9 +801,71 @@ export default function GateTrackerApp() {
     });
   }, [mistakes, mistakeFilterType, mistakeSearch]);
 
-  const activeDayForTimer = useMemo(() => {
+  const activeScheduleDay = useMemo(() => {
     return MASTER_SCHEDULE.find((d) => d.id === currentDayId) || MASTER_SCHEDULE[0];
   }, [currentDayId]);
+
+  const actualTodayScheduleDay = useMemo(() => {
+    return MASTER_SCHEDULE.find((d) => d.id === actualTodayId) || MASTER_SCHEDULE[0];
+  }, [actualTodayId]);
+
+  const activeDayIndex = useMemo(() => {
+    return MASTER_SCHEDULE.findIndex((d) => d.id === currentDayId);
+  }, [currentDayId]);
+
+  const prevScheduleDay = useMemo(() => {
+    return activeDayIndex > 0 ? MASTER_SCHEDULE[activeDayIndex - 1] : null;
+  }, [activeDayIndex]);
+
+  const nextScheduleDay = useMemo(() => {
+    return activeDayIndex < MASTER_SCHEDULE.length - 1 ? MASTER_SCHEDULE[activeDayIndex + 1] : null;
+  }, [activeDayIndex]);
+
+  const activeDayData = useMemo(() => {
+    return (
+      daysData[currentDayId] || {
+        dayId: currentDayId,
+        completed: false,
+        status: 'pending',
+        notes: '',
+        links: [],
+        subTasks: {},
+        hoursLogged: 0,
+      }
+    );
+  }, [daysData, currentDayId]);
+
+  const activeSubtasks: SubTaskItem[] = useMemo(() => {
+    return (
+      activeScheduleDay.defaultTasks ||
+      (activeScheduleDay.isSunday ? STUDY_STRUCTURE.sunday : STUDY_STRUCTURE.weekday)
+    );
+  }, [activeScheduleDay]);
+
+  const activeCheckedSubtasksCount = useMemo(() => {
+    return activeSubtasks.filter((t) => {
+      const subKey = t.id || t.key || '';
+      return activeDayData.subTasks && activeDayData.subTasks[subKey];
+    }).length;
+  }, [activeSubtasks, activeDayData]);
+
+  const activeSubtasksProgressPct = useMemo(() => {
+    if (!activeSubtasks.length) return 0;
+    return Math.round((activeCheckedSubtasksCount / activeSubtasks.length) * 100);
+  }, [activeCheckedSubtasksCount, activeSubtasks]);
+
+  const activeSubjectStyle = useMemo(() => {
+    return (
+      SUBJECT_COLORS[activeScheduleDay.subject] || {
+        bg: 'rgba(255,255,255,0.1)',
+        text: '#18181b',
+        border: '#18181b',
+        tier: 'Tier S',
+      }
+    );
+  }, [activeScheduleDay.subject]);
+
+  const activeDayForTimer = activeScheduleDay;
 
   const timerRoutine = useMemo(() => {
     return activeDayForTimer.isSunday ? STUDY_STRUCTURE.sunday : STUDY_STRUCTURE.weekday;
@@ -827,35 +980,34 @@ export default function GateTrackerApp() {
           </div>
         </div>
 
-        {/* Global KPI Row */}
+        {/* Global KPI Row (Optimized for Desktop & Mobile) */}
         <div className="global-kpi-bar">
-          <div className="kpi-item">
-            <span className="kpi-title">Completed Days</span>
-            <span className="kpi-val">{completedCount} / 126</span>
+          <div className="kpi-metrics-grid">
+            <div className="kpi-item">
+              <span className="kpi-title">Completed Days</span>
+              <span className="kpi-val">{completedCount} / 126</span>
+            </div>
+            <div className="kpi-item">
+              <span className="kpi-title">Syllabus Progress</span>
+              <span className="kpi-val">{progressPct}%</span>
+            </div>
+            <div className="kpi-item">
+              <span className="kpi-title">Hours Invested</span>
+              <span className="kpi-val">{totalHours} hrs</span>
+            </div>
+            <div className="kpi-item">
+              <span className="kpi-title">Mistakes Logged</span>
+              <span className="kpi-val">{mistakes.length}</span>
+            </div>
           </div>
-          <div className="kpi-divider"></div>
-          <div className="kpi-item">
-            <span className="kpi-title">Syllabus Progress</span>
-            <span className="kpi-val">{progressPct}%</span>
-          </div>
-          <div className="kpi-divider"></div>
-          <div className="kpi-item">
-            <span className="kpi-title">Hours Invested</span>
-            <span className="kpi-val">{totalHours} hrs</span>
-          </div>
-          <div className="kpi-divider"></div>
-          <div className="kpi-item">
-            <span className="kpi-title">Mistakes Logged</span>
-            <span className="kpi-val">{mistakes.length}</span>
-          </div>
-          <div className="kpi-divider"></div>
+
           <div className="kpi-actions">
             <button
               onClick={handleScrollToToday}
               className="btn btn-primary btn-sm"
-              title="Jump to today's schedule"
+              title="Jump to Today's Task Spotlight at Top"
             >
-              <span>Today (Oct 4)</span>
+              <span>⚡ Today ({actualTodayScheduleDay?.date.split(',')[0] || 'Oct 4'})</span>
             </button>
             <button
               onClick={handleExportBackup}
@@ -933,6 +1085,249 @@ export default function GateTrackerApp() {
         {/* ============================================================== */}
         {activeTab === 'tab-schedule' && (
           <section className="tab-pane active">
+            {/* ============================================================== */}
+            {/* PINNED HERO: TODAY'S TASK / DAILY MISSION                      */}
+            {/* ============================================================== */}
+            <div className="today-spotlight-wrapper" id="today-spotlight-card">
+              <div className={`today-spotlight-card ${activeDayData.completed ? 'completed' : ''}`}>
+                {/* Header / Ribbon */}
+                <div className="spotlight-header-row">
+                  <div className="spotlight-title-group">
+                    <span className="spotlight-live-badge">
+                      <span className="live-dot pulse-fast"></span>
+                      <span className="spotlight-badge-text">
+                        {currentDayId === actualTodayId ? "TODAY'S MISSION" : "DAILY FOCUS"}
+                      </span>
+                    </span>
+                    <div className="spotlight-date-meta">
+                      <strong className="spotlight-date-text">{activeScheduleDay.date}</strong>
+                      <span className="spotlight-dow-text">• {activeScheduleDay.dayOfWeek}</span>
+                      <span className="spotlight-day-index">Day {activeDayIndex + 1} of {MASTER_SCHEDULE.length}</span>
+                    </div>
+                  </div>
+
+                  <div className="spotlight-nav-group">
+                    <button
+                      type="button"
+                      className="spotlight-nav-btn"
+                      disabled={!prevScheduleDay}
+                      onClick={() => prevScheduleDay && handleSelectDay(prevScheduleDay.id)}
+                      title={prevScheduleDay ? `Previous Day: ${prevScheduleDay.date}` : 'No previous day'}
+                    >
+                      ◀ Prev
+                    </button>
+                    {currentDayId !== actualTodayId && (
+                      <button
+                        type="button"
+                        className="spotlight-today-jump-btn"
+                        onClick={() => handleSelectDay(actualTodayId)}
+                        title="Jump to Today's Actual Calendar Date"
+                      >
+                        ⚡ Today
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      className="spotlight-nav-btn"
+                      disabled={!nextScheduleDay}
+                      onClick={() => nextScheduleDay && handleSelectDay(nextScheduleDay.id)}
+                      title={nextScheduleDay ? `Next Day: ${nextScheduleDay.date}` : 'No next day'}
+                    >
+                      Next ▶
+                    </button>
+                    <button
+                      type="button"
+                      className="spotlight-collapse-btn"
+                      onClick={() => setIsTodaySpotlightCollapsed(!isTodaySpotlightCollapsed)}
+                      title={isTodaySpotlightCollapsed ? 'Expand Today Card' : 'Minimize Today Card'}
+                    >
+                      {isTodaySpotlightCollapsed ? 'Expand ▼' : 'Minimize ▲'}
+                    </button>
+                  </div>
+                </div>
+
+                {!isTodaySpotlightCollapsed && (
+                  <div className="spotlight-body">
+                    {/* Meta Badges Row */}
+                    <div className="spotlight-meta-badges">
+                      <span
+                        className="subject-badge spotlight-subject-badge"
+                        style={{
+                          background: activeSubjectStyle.bg,
+                          color: activeSubjectStyle.text,
+                          borderColor: activeSubjectStyle.border,
+                        }}
+                      >
+                        {activeScheduleDay.subject}
+                      </span>
+                      <span
+                        className={`tier-badge ${
+                          activeScheduleDay.tier === 'Tier S'
+                            ? 'tier-s'
+                            : activeScheduleDay.tier === 'Tier A'
+                            ? 'tier-a'
+                            : 'tier-b'
+                        }`}
+                      >
+                        {activeScheduleDay.tier}
+                      </span>
+                      {activeScheduleDay.isTest && (
+                        <span className="test-badge">📝 Test / Diagnostic</span>
+                      )}
+                      {activeScheduleDay.milestone && (
+                        <span className="milestone-badge">⭐ {activeScheduleDay.milestone}</span>
+                      )}
+                      <span className="hours-target-badge">
+                        ⏱️ {activeScheduleDay.suggestedHours || 7}h Target
+                      </span>
+                      {activeDayData.completed ? (
+                        <span className="status-badge-completed">✅ Completed</span>
+                      ) : activeCheckedSubtasksCount > 0 ? (
+                        <span
+                          className="status-badge-inprogress"
+                          style={{
+                            background: '#fef3c7',
+                            color: '#92400e',
+                            border: '1.5px solid var(--border-black)',
+                            borderRadius: 4,
+                            padding: '2px 8px',
+                            fontSize: '0.72rem',
+                            fontWeight: 800,
+                          }}
+                        >
+                          🟡 In Progress ({activeCheckedSubtasksCount}/{activeSubtasks.length})
+                        </span>
+                      ) : (
+                        <span
+                          className="status-badge-pending"
+                          style={{
+                            background: 'var(--bg-surface-subtle)',
+                            color: 'var(--text-secondary)',
+                            border: '1.5px solid var(--border-black)',
+                            borderRadius: 4,
+                            padding: '2px 8px',
+                            fontSize: '0.72rem',
+                            fontWeight: 700,
+                          }}
+                        >
+                          ⏳ Pending
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Topic Title */}
+                    <h2 className="spotlight-topic-title">
+                      {activeScheduleDay.topic}
+                    </h2>
+
+                    {/* Subtopics */}
+                    {activeScheduleDay.subTopics && activeScheduleDay.subTopics.length > 0 && (
+                      <div className="spotlight-subtopics-row">
+                        {activeScheduleDay.subTopics.map((st, i) => (
+                          <span key={i} className="subtopic-pill">
+                            {st}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Guidance Box */}
+                    {activeScheduleDay.guidance && (
+                      <div className="spotlight-guidance-box">
+                        <span className="guidance-icon">💡</span>
+                        <div className="guidance-content">
+                          <strong>Study Strategy:</strong> {activeScheduleDay.guidance}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* 7-Hour Architecture Checklist */}
+                    <div className="spotlight-checklist-section">
+                      <div className="spotlight-checklist-header">
+                        <div className="checklist-heading-group">
+                          <span className="checklist-heading-title">Today&apos;s 7-Hour Architecture</span>
+                          <span className="checklist-count-pill">
+                            {activeCheckedSubtasksCount} / {activeSubtasks.length} Done ({activeSubtasksProgressPct}%)
+                          </span>
+                        </div>
+                        <div className="spotlight-progress-mini">
+                          <div
+                            className="spotlight-progress-fill"
+                            style={{ width: `${activeSubtasksProgressPct}%` }}
+                          ></div>
+                        </div>
+                      </div>
+
+                      {/* Subtasks Grid */}
+                      <div className="spotlight-subtasks-grid">
+                        {activeSubtasks.map((task, idx) => {
+                          const subKey = task.id || task.key || `task-${idx}`;
+                          const isChecked = !!(activeDayData.subTasks && activeDayData.subTasks[subKey]);
+                          return (
+                            <label
+                              key={subKey}
+                              className={`spotlight-task-item ${isChecked ? 'checked' : ''}`}
+                            >
+                              <input
+                                type="checkbox"
+                                className="custom-checkbox"
+                                checked={isChecked}
+                                onChange={(e) => handleToggleSubtask(activeScheduleDay.id, subKey, e)}
+                              />
+                              <div className="task-info">
+                                <span className="task-label">{task.label || task.name}</span>
+                                {task.desc && <span className="task-desc">{task.desc}</span>}
+                              </div>
+                              <span className="task-hours-badge">{task.hours}h</span>
+                            </label>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Action Buttons Bar */}
+                    <div className="spotlight-actions-bar">
+                      <button
+                        type="button"
+                        onClick={() => handleFocusDayInTimer(activeScheduleDay.id)}
+                        className="btn btn-primary spotlight-action-btn"
+                      >
+                        <span>⏱️ Focus in Timer (7h)</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleOpenNotes(activeScheduleDay.id)}
+                        className="btn btn-secondary spotlight-action-btn"
+                      >
+                        <span>
+                          📝 Notes & Links{' '}
+                          {activeDayData.links?.length ? `(${activeDayData.links.length})` : ''}
+                        </span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleOpenMistakeFromDay(activeScheduleDay)}
+                        className="btn btn-outline spotlight-action-btn"
+                      >
+                        <span>🚨 Log Mistake</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleToggleDayCompleteDirect(activeScheduleDay.id)}
+                        className={`btn spotlight-action-btn ${
+                          activeDayData.completed ? 'btn-outline' : 'btn-success'
+                        }`}
+                      >
+                        <span>
+                          {activeDayData.completed ? '↩ Mark Incomplete' : '✅ Mark Day Complete'}
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
             {/* Filter and Search Panel */}
             <div className="schedule-controls-panel">
               <div className="search-box">
@@ -949,72 +1344,88 @@ export default function GateTrackerApp() {
                 )}
               </div>
 
-              {/* Month Pills */}
-              <div className="filter-group month-filters">
-                <span className="filter-group-title">Month:</span>
-                <div className="pill-row">
-                  {['all', 'October', 'November', 'December', 'January', 'February'].map((m) => (
-                    <button
-                      key={m}
-                      className={`pill-btn ${selectedMonth === m ? 'active' : ''}`}
-                      onClick={() => setSelectedMonth(m)}
-                    >
-                      {m === 'all'
-                        ? 'All'
-                        : m === 'October'
-                        ? "Oct '26 (Math)"
-                        : m === 'November'
-                        ? "Nov '26 (LA/Calc)"
-                        : m === 'December'
-                        ? "Dec '26 (DSA/DB/ML)"
-                        : m === 'January'
-                        ? "Jan '27 (ML/AI)"
-                        : "Feb '27 (Mocks)"}
-                    </button>
-                  ))}
-                </div>
+              {/* Mobile Filter Toggle */}
+              <div className="filter-mobile-toggle-row">
+                <button
+                  type="button"
+                  className="mobile-filter-toggle-btn"
+                  onClick={() => setIsMobileFiltersOpen(!isMobileFiltersOpen)}
+                >
+                  <span>
+                    ⚡ Filters ({selectedMonth === 'all' ? 'All Months' : selectedMonth} • {selectedStatus} • {selectedTier})
+                  </span>
+                  <span className="toggle-arrow">{isMobileFiltersOpen ? '▲ Hide' : '▼ Expand'}</span>
+                </button>
               </div>
 
-              {/* Secondary Filters */}
-              <div className="filter-secondary-row">
-                <div className="filter-group status-filters">
-                  <span className="filter-group-title">Status:</span>
+              <div className={`filter-collapsible-wrapper ${isMobileFiltersOpen ? 'mobile-open' : ''}`}>
+                {/* Month Pills */}
+                <div className="filter-group month-filters">
+                  <span className="filter-group-title">Month:</span>
                   <div className="pill-row">
-                    {[
-                      { key: 'all', label: 'All' },
-                      { key: 'pending', label: 'Pending' },
-                      { key: 'completed', label: 'Completed' },
-                      { key: 'has_notes', label: 'Has Notes/Links' },
-                      { key: 'tests', label: 'Tests & Checkpoints' },
-                    ].map((s) => (
+                    {['all', 'October', 'November', 'December', 'January', 'February'].map((m) => (
                       <button
-                        key={s.key}
-                        className={`pill-btn ${selectedStatus === s.key ? 'active' : ''}`}
-                        onClick={() => setSelectedStatus(s.key)}
+                        key={m}
+                        className={`pill-btn ${selectedMonth === m ? 'active' : ''}`}
+                        onClick={() => setSelectedMonth(m)}
                       >
-                        {s.label}
+                        {m === 'all'
+                          ? 'All'
+                          : m === 'October'
+                          ? "Oct '26 (Math)"
+                          : m === 'November'
+                          ? "Nov '26 (LA/Calc)"
+                          : m === 'December'
+                          ? "Dec '26 (DSA/DB/ML)"
+                          : m === 'January'
+                          ? "Jan '27 (ML/AI)"
+                          : "Feb '27 (Mocks)"}
                       </button>
                     ))}
                   </div>
                 </div>
 
-                <div className="filter-group tier-filters">
-                  <span className="filter-group-title">Priority Tier:</span>
-                  <div className="pill-row">
-                    {[
-                      { key: 'all', label: 'All Tiers', cls: '' },
-                      { key: 'Tier S', label: '🔴 Tier S (Very High)', cls: 'tier-s-btn' },
-                      { key: 'Tier A', label: '🟠 Tier A (High)', cls: 'tier-a-btn' },
-                      { key: 'Tier B', label: '🟢 Tier B (Medium/Low)', cls: 'tier-b-btn' },
-                    ].map((t) => (
-                      <button
-                        key={t.key}
-                        className={`pill-btn ${t.cls} ${selectedTier === t.key ? 'active' : ''}`}
-                        onClick={() => setSelectedTier(t.key)}
-                      >
-                        {t.label}
-                      </button>
-                    ))}
+                {/* Secondary Filters */}
+                <div className="filter-secondary-row">
+                  <div className="filter-group status-filters">
+                    <span className="filter-group-title">Status:</span>
+                    <div className="pill-row">
+                      {[
+                        { key: 'all', label: 'All' },
+                        { key: 'pending', label: 'Pending' },
+                        { key: 'completed', label: 'Completed' },
+                        { key: 'has_notes', label: 'Has Notes/Links' },
+                        { key: 'tests', label: 'Tests & Checkpoints' },
+                      ].map((s) => (
+                        <button
+                          key={s.key}
+                          className={`pill-btn ${selectedStatus === s.key ? 'active' : ''}`}
+                          onClick={() => setSelectedStatus(s.key)}
+                        >
+                          {s.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="filter-group tier-filters">
+                    <span className="filter-group-title">Priority Tier:</span>
+                    <div className="pill-row">
+                      {[
+                        { key: 'all', label: 'All Tiers', cls: '' },
+                        { key: 'Tier S', label: '🔴 Tier S (Very High)', cls: 'tier-s-btn' },
+                        { key: 'Tier A', label: '🟠 Tier A (High)', cls: 'tier-a-btn' },
+                        { key: 'Tier B', label: '🟢 Tier B (Medium/Low)', cls: 'tier-b-btn' },
+                      ].map((t) => (
+                        <button
+                          key={t.key}
+                          className={`pill-btn ${t.cls} ${selectedTier === t.key ? 'active' : ''}`}
+                          onClick={() => setSelectedTier(t.key)}
+                        >
+                          {t.label}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1051,7 +1462,8 @@ export default function GateTrackerApp() {
                   hoursLogged: 0,
                 };
                 const isCompleted = !!data.completed;
-                const isToday = day.id === currentDayId;
+                const isToday = day.id === actualTodayId;
+                const isActiveFocus = day.id === currentDayId;
                 const subjectStyle = SUBJECT_COLORS[day.subject] || {
                   bg: 'rgba(255,255,255,0.1)',
                   text: '#fff',
@@ -1075,7 +1487,7 @@ export default function GateTrackerApp() {
                     id={`card-${day.id}`}
                     className={`day-card ${isCompleted ? 'completed' : ''} ${
                       isToday ? 'is-today' : ''
-                    } ${day.isTest ? 'is-test' : ''}`}
+                    } ${isActiveFocus ? 'is-active-focus' : ''} ${day.isTest ? 'is-test' : ''}`}
                   >
                     <div className="day-card-main-row">
                       {/* Day Master Checkbox */}
@@ -1230,6 +1642,22 @@ export default function GateTrackerApp() {
                                 {data.links.length} links
                               </span>
                             )}
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              handleSelectDay(day.id);
+                              const spotlight = document.getElementById('today-spotlight-card');
+                              if (spotlight) {
+                                spotlight.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                spotlight.classList.add('spotlight-pulse-highlight');
+                                setTimeout(() => spotlight.classList.remove('spotlight-pulse-highlight'), 1500);
+                              }
+                            }}
+                            className="day-action-btn"
+                            title="Focus on this day at the top"
+                          >
+                            <span>📌 View at Top</span>
                           </button>
 
                           <button
@@ -2080,6 +2508,18 @@ export default function GateTrackerApp() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Mobile Floating "Today's Task" Pill */}
+      {showScrollToTopFab && activeTab === 'tab-schedule' && (
+        <button
+          className="fab-back-to-today"
+          onClick={handleScrollToToday}
+          title="Back to Today's Task Spotlight at Top"
+        >
+          <span className="fab-pulse-dot"></span>
+          <span>⚡ Today&apos;s Task</span>
+        </button>
       )}
 
       {/* Toast Notification Container */}
