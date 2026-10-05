@@ -676,10 +676,11 @@ export default function GateTrackerApp() {
   };
 
   // Countdown to Exam (Feb 6, 2027)
-  const [countdown, setCountdown] = useState<{ days: string; hours: string; mins: string }>({
+  const [countdown, setCountdown] = useState<{ days: string; hours: string; mins: string; secs: string }>({
     days: '--',
     hours: '--',
     mins: '--',
+    secs: '--',
   });
   useEffect(() => {
     const examDate = new Date('2027-02-06T09:00:00+05:30').getTime();
@@ -687,20 +688,22 @@ export default function GateTrackerApp() {
       const now = new Date().getTime();
       const diff = examDate - now;
       if (diff <= 0) {
-        setCountdown({ days: '0', hours: '00', mins: '00' });
+        setCountdown({ days: '0', hours: '00', mins: '00', secs: '00' });
         return;
       }
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
       const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const secs = Math.floor((diff % (1000 * 60)) / 1000);
       setCountdown({
         days: String(days),
         hours: String(hours).padStart(2, '0'),
         mins: String(mins).padStart(2, '0'),
+        secs: String(secs).padStart(2, '0'),
       });
     }
     tick();
-    const interval = setInterval(tick, 60000);
+    const interval = setInterval(tick, 1000);
     return () => clearInterval(interval);
   }, []);
 
@@ -965,6 +968,11 @@ export default function GateTrackerApp() {
                 <span className="cd-item">
                   <strong>{countdown.mins}</strong>
                   <small>mins</small>
+                </span>
+                <span className="cd-sep">:</span>
+                <span className="cd-item">
+                  <strong>{countdown.secs}</strong>
+                  <small>secs</small>
                 </span>
               </div>
               <div className="countdown-footer">Exam Window: Feb 6–21, 2027</div>

@@ -446,14 +446,25 @@ body {
   font-weight: 700;
 }
 
+.countdown-card {
+  min-width: 255px;
+}
+
 .countdown-digits {
   display: flex;
   align-items: baseline;
-  gap: 6px;
+  gap: 5px;
   font-family: var(--font-mono);
-  font-size: 1.45rem;
+  font-size: 1.35rem;
   font-weight: 700;
   color: var(--text-primary);
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.cd-item {
+  display: inline-flex;
+  align-items: baseline;
 }
 
 .cd-item strong {
@@ -461,7 +472,7 @@ body {
 }
 
 .cd-item small {
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   color: var(--text-muted);
   font-weight: 600;
   margin-left: 2px;
@@ -470,6 +481,7 @@ body {
 .cd-sep {
   color: var(--border-black);
   font-weight: 800;
+  opacity: 0.7;
 }
 
 .countdown-footer {
