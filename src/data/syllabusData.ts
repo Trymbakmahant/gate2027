@@ -56,6 +56,21 @@ export const GATE_DA_SYLLABUS: SyllabusSection[] = [
     },
     officialDescription:
       "Counting (permutation and combinations), probability axioms, Sample space, events, independent events, mutually exclusive events, marginal, conditional and joint probability, Bayes Theorem, conditional expectation and variance, mean, median, mode and standard deviation, correlation, and covariance, random variables, discrete random variables and probability mass functions, uniform, Bernoulli, binomial distribution, Continuous random variables and probability distribution function, uniform, exponential, Poisson, normal, standard normal, t-distribution, chi-squared distributions, cumulative distribution function, Conditional PDF, Central limit theorem, confidence interval, z-test, t-test, chi-squared test.",
+    learningResources: [
+      {
+        id: "prob-stats-sachin-mittal-playlist",
+        title: "Probability & Statistics for GATE DA/CS (Full Playlist)",
+        url: "https://www.youtube.com/watch?v=eTEEmAo7xuU&list=PLgjejdknTfWMQ-IofDV-3jwQkoVNTOLch",
+        type: "youtube-playlist",
+        author: "Sachin Mittal",
+        platform: "YouTube",
+        description:
+          "Official comprehensive lecture series covering Permutations & Combinations, Probability Axioms, Sample Spaces, Bayes Theorem, Expectation & Variance, Random Variables, PMF/PDF, Probability Distributions (Binomial, Poisson, Normal, t, Chi-squared), CLT, and Hypothesis Testing for GATE DA.",
+        embedVideoId: "eTEEmAo7xuU",
+        playlistId: "PLgjejdknTfWMQ-IofDV-3jwQkoVNTOLch",
+        tags: ["Tier S", "Probability", "Distributions", "Bayes Theorem", "CLT", "Hypothesis Testing"]
+      }
+    ],
     subtopics: [
       { id: "counting-perm-comb", title: "Counting: Permutations & Combinations" },
       { id: "prob-axioms-sample-space", title: "Probability Axioms, Sample Space & Events" },

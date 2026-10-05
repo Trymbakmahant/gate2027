@@ -154,7 +154,7 @@ export const MASTER_SCHEDULE: DaySchedule[] = [
     tier: "Tier S",
     topic: "Sample Space + Events (Probability I Begins)",
     subTopics: ["Discrete vs continuous sample spaces", "Union, intersection, complement of events", "Mutually exhaustive events", "Venn diagrams in probability"],
-    guidance: "Sunday schedule: 2h revision, 2h problems, 1.5h test/analysis, 1h weak spots, 30m GA.",
+    guidance: "Probability I begins! Tier S subject (15-18 marks). Primary Recommended Course: Sachin Mittal - Probability & Statistics for GATE DA (https://www.youtube.com/watch?v=eTEEmAo7xuU&list=PLgjejdknTfWMQ-IofDV-3jwQkoVNTOLch). Sunday schedule: 2h revision, 2h problems, 1.5h test/analysis, 1h weak spots, 30m GA.",
     isTest: false,
     isSunday: true,
     suggestedHours: 7

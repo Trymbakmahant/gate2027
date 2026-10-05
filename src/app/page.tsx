@@ -2283,7 +2283,44 @@ export default function GateTrackerApp() {
                           cursor: 'pointer'
                         }}
                       >
-                        + Pin Sachin Mittal YouTube Playlist
+                        + Pin Sachin Mittal Linear Algebra Playlist
+                      </button>
+                    </div>
+                  )}
+
+                  {(MASTER_SCHEDULE.find((d) => d.id === editingDayId)?.subject === 'Probability & Statistics' ||
+                    MASTER_SCHEDULE.find((d) => d.id === editingDayId)?.subject === 'Probability and Statistics') && (
+                    <div style={{ marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', padding: '8px 12px', background: 'var(--bg-surface-subtle)', border: '1.5px dashed var(--border-black)', borderRadius: 'var(--radius-sm)' }}>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 800 }}>💡 Recommended Playlist:</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const exists = modalLinks.some(l => l.url.includes('eTEEmAo7xuU'));
+                          if (!exists) {
+                            setModalLinks(prev => [
+                              ...prev,
+                              {
+                                id: `prob-sachin-mittal-${Date.now()}`,
+                                title: 'Sachin Mittal — Probability & Statistics for GATE DA/CS (Full Playlist)',
+                                url: 'https://www.youtube.com/watch?v=eTEEmAo7xuU&list=PLgjejdknTfWMQ-IofDV-3jwQkoVNTOLch',
+                                type: 'video',
+                                addedAt: new Date()
+                              }
+                            ]);
+                          }
+                        }}
+                        style={{
+                          fontSize: '0.75rem',
+                          fontWeight: 800,
+                          background: '#ffe4e6',
+                          color: '#9f1239',
+                          border: '1px solid #f43f5e',
+                          padding: '4px 8px',
+                          borderRadius: '4px',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        + Pin Sachin Mittal Probability &amp; Statistics Playlist
                       </button>
                     </div>
                   )}
