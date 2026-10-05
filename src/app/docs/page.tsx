@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Link from 'next/link';
 import { GATE_DA_SYLLABUS, SyllabusSection, SyllabusSubtopic } from '@/data/syllabusData';
+import MachineLearningStudyModule from '@/components/docs/MachineLearningStudyModule';
 
 export type ThemeMode = 'cream-black' | 'all-black' | 'cream-white';
 
@@ -269,6 +270,9 @@ export default function DocsPage() {
                   <div className="dropdown-menu-scroll">
                     {currentSection.subtopics.map((st, idx) => {
                       const isCurrent = st.id === selectedSubtopicId;
+                      const isStudied =
+                        currentSection.id === 'machine-learning' &&
+                        (st.id === 'supervised-formulation' || st.id === 'linear-regression');
                       return (
                         <button
                           key={st.id}
@@ -284,6 +288,7 @@ export default function DocsPage() {
                         >
                           <span className="item-num-pill">{String(idx + 1).padStart(2, '0')}</span>
                           <span className="item-label">{st.title}</span>
+                          {isStudied && <span className="item-studied-badge">✨ 3D Sim</span>}
                           {isCurrent && <span className="item-check-icon">✓</span>}
                         </button>
                       );
@@ -344,6 +349,9 @@ export default function DocsPage() {
                 >
                   <div className="subject-item-top">
                     <span className="section-num-pill">Sec {sec.sectionNumber}</span>
+                    {sec.id === 'machine-learning' && (
+                      <span className="sec-interactive-pill">✨ 3D Lab</span>
+                    )}
                     <span className={`tier-badge ${sec.tier === 'Tier S' ? 'tier-s' : sec.tier === 'Tier A' ? 'tier-a' : 'tier-b'}`}>
                       {sec.tier}
                     </span>
@@ -436,7 +444,10 @@ export default function DocsPage() {
                 </span>
 
                 <span className="status-badge-ready">
-                  ⚡ Ready for Learning
+                  {currentSection.id === 'machine-learning' &&
+                  (currentSubtopic.id === 'supervised-formulation' || currentSubtopic.id === 'linear-regression')
+                    ? '✨ Interactive Study Lab & 3D Sim'
+                    : '⚡ Ready for Learning'}
                 </span>
               </div>
 
@@ -449,79 +460,165 @@ export default function DocsPage() {
               </div>
             </div>
 
-            {/* Empty Canvas Workspace (User requested: "don't put any thing there rn i will learn stuff and ask you to put info there step by step") */}
-            <div className="empty-workspace-card">
-              <div className="empty-workspace-banner">
-                <div className="empty-icon-wrap">
-                  <span className="empty-icon">📖</span>
-                </div>
-                <div className="empty-text-wrap">
-                  <h3>Study Workspace Ready</h3>
-                  <p>
-                    This topic space is intentionally clear. As you learn <strong>&ldquo;{currentSubtopic.title}&rdquo;</strong>,
-                    you can ask to document:
-                  </p>
-                  <ul className="step-by-step-points">
-                    <li>Core mathematical definitions, axioms & intuitive visualizations</li>
-                    <li>Key formulas, derivations, shortcuts & matrix identities</li>
-                    <li>Python code demonstrations (NumPy, SciPy, Scikit-learn, PyTorch)</li>
-                    <li>Past GATE DA question patterns & tricky pitfalls to avoid</li>
-                  </ul>
-                </div>
-              </div>
-
-              {/* Interactive Personal Scratchpad for Quick Notes */}
-              <div className="scratchpad-section">
-                <div className="scratchpad-header">
-                  <div className="scratchpad-title-row">
-                    <span className="scratchpad-icon">✍️</span>
-                    <h4>Personal Study Notes & Questions Scratchpad</h4>
-                    {isSavingNotes && <span className="saving-indicator">[Saving...]</span>}
-                  </div>
-                  <span className="scratchpad-hint">Auto-saved locally for this subtopic</span>
-                </div>
-
-                <textarea
-                  className="scratchpad-textarea"
-                  rows={8}
-                  placeholder={`Write your draft notes, doubts, or formulas here for "${currentSubtopic.title}"...\n\nExample:\n- Key formula I need to remember:\n- Question I had while watching the lecture:\n- Mistakes to watch out for:`}
-                  value={userNotes[selectedSubtopicId] || ''}
-                  onChange={(e) => handleNoteChange(e.target.value)}
+            {/* Check if user is on learned Machine Learning subtopics */}
+            {currentSection.id === 'machine-learning' &&
+            (currentSubtopic.id === 'supervised-formulation' || currentSubtopic.id === 'linear-regression') ? (
+              <div className="studied-canvas-wrap">
+                {/* 3D Simulation & Master Formulas Study Module */}
+                <MachineLearningStudyModule
+                  themeMode={currentTheme}
+                  initialTab={currentSubtopic.id === 'supervised-formulation' ? 'paradigms' : '3d-sim'}
                 />
-              </div>
 
-              {/* Learning Roadmap Blueprint */}
-              <div className="learning-blueprint-row">
-                <div className="blueprint-step">
-                  <div className="step-num">01</div>
-                  <div className="step-desc">
-                    <strong>Concept Study (2.5h)</strong>
-                    <span>Deep dive into theory without memorizing formulas blindly</span>
+                {/* Personal Study Notes Scratchpad */}
+                <div className="empty-workspace-card" style={{ marginTop: '20px' }}>
+                  <div className="scratchpad-section">
+                    <div className="scratchpad-header">
+                      <div className="scratchpad-title-row">
+                        <span className="scratchpad-icon">✍️</span>
+                        <h4>Personal Study Notes &amp; Formulas Scratchpad</h4>
+                        {isSavingNotes && <span className="saving-indicator">[Saving...]</span>}
+                      </div>
+                      <span className="scratchpad-hint">Auto-saved locally for this subtopic</span>
+                    </div>
+
+                    <textarea
+                      className="scratchpad-textarea"
+                      rows={6}
+                      placeholder={`Write your personal notes, doubts, or derivation insights here for "${currentSubtopic.title}"...\n\nExample:\n- Remember: OLS line ALWAYS passes through (x_bar, y_bar)\n- Sum of residuals e_i is identically 0 when intercept is included\n- R^2 in simple linear regression equals r_xy^2`}
+                      value={userNotes[selectedSubtopicId] || ''}
+                      onChange={(e) => handleNoteChange(e.target.value)}
+                    />
                   </div>
-                </div>
-                <div className="blueprint-step">
-                  <div className="step-num">02</div>
-                  <div className="step-desc">
-                    <strong>Problem Solving (2.0h)</strong>
-                    <span>Solve standard workbook & textbook problems</span>
-                  </div>
-                </div>
-                <div className="blueprint-step">
-                  <div className="step-num">03</div>
-                  <div className="step-desc">
-                    <strong>GATE PYQs (1.5h)</strong>
-                    <span>Test understanding under realistic timed conditions</span>
-                  </div>
-                </div>
-                <div className="blueprint-step">
-                  <div className="step-num">04</div>
-                  <div className="step-desc">
-                    <strong>Error Notebook (0.5h)</strong>
-                    <span>Log any wrong questions into your Mistake Book</span>
+
+                  {/* Learning Roadmap Blueprint */}
+                  <div className="learning-blueprint-row">
+                    <div className="blueprint-step">
+                      <div className="step-num">01</div>
+                      <div className="step-desc">
+                        <strong>Concept Study (2.5h)</strong>
+                        <span>Deep dive into theory without memorizing formulas blindly</span>
+                      </div>
+                    </div>
+                    <div className="blueprint-step">
+                      <div className="step-num">02</div>
+                      <div className="step-desc">
+                        <strong>Problem Solving (2.0h)</strong>
+                        <span>Solve standard workbook &amp; textbook problems</span>
+                      </div>
+                    </div>
+                    <div className="blueprint-step">
+                      <div className="step-num">03</div>
+                      <div className="step-desc">
+                        <strong>GATE PYQs (1.5h)</strong>
+                        <span>Test understanding under realistic timed conditions</span>
+                      </div>
+                    </div>
+                    <div className="blueprint-step">
+                      <div className="step-num">04</div>
+                      <div className="step-desc">
+                        <strong>Error Notebook (0.5h)</strong>
+                        <span>Log any wrong questions into your Mistake Book</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              <>
+                {/* Global Shortcut Banner to Learned Module */}
+                <div className="studied-module-banner">
+                  <div className="banner-left">
+                    <span className="banner-badge">✨ Interactive 3D Lab Ready</span>
+                    <strong>Machine Learning: Supervised vs. Unsupervised &amp; Single Linear Regression 3D Simulation</strong>
+                  </div>
+                  <button
+                    type="button"
+                    className="banner-jump-btn"
+                    onClick={() => {
+                      setSelectedSectionId('machine-learning');
+                      setSelectedSubtopicId('linear-regression');
+                    }}
+                  >
+                    Open 3D Simulation &amp; Formulas ➔
+                  </button>
+                </div>
+
+                {/* Empty Canvas Workspace */}
+                <div className="empty-workspace-card">
+                  <div className="empty-workspace-banner">
+                    <div className="empty-icon-wrap">
+                      <span className="empty-icon">📖</span>
+                    </div>
+                    <div className="empty-text-wrap">
+                      <h3>Study Workspace Ready</h3>
+                      <p>
+                        This topic space is intentionally clear. As you learn <strong>&ldquo;{currentSubtopic.title}&rdquo;</strong>,
+                        you can ask to document:
+                      </p>
+                      <ul className="step-by-step-points">
+                        <li>Core mathematical definitions, axioms &amp; intuitive visualizations</li>
+                        <li>Key formulas, derivations, shortcuts &amp; matrix identities</li>
+                        <li>Python code demonstrations (NumPy, SciPy, Scikit-learn, PyTorch)</li>
+                        <li>Past GATE DA question patterns &amp; tricky pitfalls to avoid</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Interactive Personal Scratchpad for Quick Notes */}
+                  <div className="scratchpad-section">
+                    <div className="scratchpad-header">
+                      <div className="scratchpad-title-row">
+                        <span className="scratchpad-icon">✍️</span>
+                        <h4>Personal Study Notes &amp; Questions Scratchpad</h4>
+                        {isSavingNotes && <span className="saving-indicator">[Saving...]</span>}
+                      </div>
+                      <span className="scratchpad-hint">Auto-saved locally for this subtopic</span>
+                    </div>
+
+                    <textarea
+                      className="scratchpad-textarea"
+                      rows={8}
+                      placeholder={`Write your draft notes, doubts, or formulas here for "${currentSubtopic.title}"...\n\nExample:\n- Key formula I need to remember:\n- Question I had while watching the lecture:\n- Mistakes to watch out for:`}
+                      value={userNotes[selectedSubtopicId] || ''}
+                      onChange={(e) => handleNoteChange(e.target.value)}
+                    />
+                  </div>
+
+                  {/* Learning Roadmap Blueprint */}
+                  <div className="learning-blueprint-row">
+                    <div className="blueprint-step">
+                      <div className="step-num">01</div>
+                      <div className="step-desc">
+                        <strong>Concept Study (2.5h)</strong>
+                        <span>Deep dive into theory without memorizing formulas blindly</span>
+                      </div>
+                    </div>
+                    <div className="blueprint-step">
+                      <div className="step-num">02</div>
+                      <div className="step-desc">
+                        <strong>Problem Solving (2.0h)</strong>
+                        <span>Solve standard workbook &amp; textbook problems</span>
+                      </div>
+                    </div>
+                    <div className="blueprint-step">
+                      <div className="step-num">03</div>
+                      <div className="step-desc">
+                        <strong>GATE PYQs (1.5h)</strong>
+                        <span>Test understanding under realistic timed conditions</span>
+                      </div>
+                    </div>
+                    <div className="blueprint-step">
+                      <div className="step-num">04</div>
+                      <div className="step-desc">
+                        <strong>Error Notebook (0.5h)</strong>
+                        <span>Log any wrong questions into your Mistake Book</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </main>
       </div>
