@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import Link from 'next/link';
 import confetti from 'canvas-confetti';
 import {
   MASTER_SCHEDULE,
@@ -1076,6 +1077,22 @@ export default function GateTrackerApp() {
         >
           <span>Rules & Tier Strategy</span>
         </button>
+        <Link
+          href="/docs"
+          className="tab-btn docs-nav-tab-btn"
+          title="Open Official Syllabus Docs & Study Notes Canvas"
+        >
+          <span>📚 Syllabus Docs</span>
+          <span
+            className="tab-pill"
+            style={{
+              background: currentTheme === 'all-black' ? '#1e1e24' : '#e0e7ff',
+              color: currentTheme === 'all-black' ? '#ffffff' : '#3730a3',
+            }}
+          >
+            PDF Scope
+          </span>
+        </Link>
       </nav>
 
       {/* Main Content Area */}
@@ -1153,9 +1170,9 @@ export default function GateTrackerApp() {
                       <span
                         className="subject-badge spotlight-subject-badge"
                         style={{
-                          background: activeSubjectStyle.bg,
-                          color: activeSubjectStyle.text,
-                          borderColor: activeSubjectStyle.border,
+                          background: currentTheme === 'all-black' ? 'var(--bg-surface-elevated)' : activeSubjectStyle.bg,
+                          color: currentTheme === 'all-black' ? '#ffffff' : activeSubjectStyle.text,
+                          borderColor: currentTheme === 'all-black' ? 'var(--border-black)' : activeSubjectStyle.border,
                         }}
                       >
                         {activeScheduleDay.subject}
@@ -1186,8 +1203,8 @@ export default function GateTrackerApp() {
                         <span
                           className="status-badge-inprogress"
                           style={{
-                            background: '#fef3c7',
-                            color: '#92400e',
+                            background: currentTheme === 'all-black' ? '#451a03' : '#fef3c7',
+                            color: currentTheme === 'all-black' ? '#ffffff' : '#92400e',
                             border: '1.5px solid var(--border-black)',
                             borderRadius: 4,
                             padding: '2px 8px',
@@ -1509,9 +1526,9 @@ export default function GateTrackerApp() {
                           <span
                             className="subject-badge"
                             style={{
-                              background: subjectStyle.bg,
-                              color: subjectStyle.text,
-                              borderColor: subjectStyle.border,
+                              background: currentTheme === 'all-black' ? 'var(--bg-surface-elevated)' : subjectStyle.bg,
+                              color: currentTheme === 'all-black' ? '#ffffff' : subjectStyle.text,
+                              borderColor: currentTheme === 'all-black' ? 'var(--border-black)' : subjectStyle.border,
                             }}
                           >
                             {day.subject}
