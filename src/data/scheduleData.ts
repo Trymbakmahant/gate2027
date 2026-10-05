@@ -609,7 +609,7 @@ export const MASTER_SCHEDULE: DaySchedule[] = [
     tier: "Tier S",
     topic: "Vectors + Vector Spaces (Linear Algebra Begins)",
     subTopics: ["Vector addition & scalar multiplication axioms", "Vector space R^n", "Linear combinations & span", "Geometry of lines and hyperplanes"],
-    guidance: "Linear Algebra is Tier S! One of the areas you must become extremely comfortable with.",
+    guidance: "Linear Algebra is Tier S! One of the areas you must become extremely comfortable with. Primary Recommended Playlist: Sachin Mittal - Linear Algebra for ML & GATE DA (https://www.youtube.com/watch?v=DrCeIbpfuzE&list=PLgjejdknTfWP9cYIHjxBRRdtGcUBLmCQC)",
     isTest: false,
     isSunday: true,
     suggestedHours: 7

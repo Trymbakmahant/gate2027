@@ -35,6 +35,8 @@ export interface TopicFormulaItem {
 
 export type AppThemeMode = 'cream-black' | 'all-black' | 'cream-white';
 
+import { LearningResource } from '@/data/syllabusData';
+
 export interface TopicModule {
   subtopicId: string;
   title: string;
@@ -42,6 +44,7 @@ export interface TopicModule {
   summary: string;
   keyTakeaways: string[];
   gateImportance: 'High' | 'Very High' | 'Critical (Direct Marks)';
+  learningResources?: LearningResource[];
   simulation?: {
     title: string;
     tabLabel: string;
@@ -63,4 +66,4 @@ export interface TopicModule {
   };
 }
 
-export type TopicWorkspaceTab = 'overview' | 'simulation' | 'formulas' | 'quiz' | 'notes';
+export type TopicWorkspaceTab = 'overview' | 'simulation' | 'formulas' | 'quiz' | 'resources' | 'notes';

@@ -11,6 +11,19 @@ export interface SyllabusSubtopic {
   notes?: string; // Kept empty for step-by-step user learning
 }
 
+export interface LearningResource {
+  id: string;
+  title: string;
+  url: string;
+  type: 'youtube-playlist' | 'video' | 'notes' | 'article' | 'textbook';
+  author?: string;
+  platform?: string;
+  description?: string;
+  embedVideoId?: string;
+  playlistId?: string;
+  tags?: string[];
+}
+
 export interface SyllabusSection {
   id: string;
   sectionNumber: number;
@@ -25,6 +38,7 @@ export interface SyllabusSection {
   };
   officialDescription: string;
   subtopics: SyllabusSubtopic[];
+  learningResources?: LearningResource[];
 }
 
 export const GATE_DA_SYLLABUS: SyllabusSection[] = [
@@ -76,6 +90,21 @@ export const GATE_DA_SYLLABUS: SyllabusSection[] = [
     },
     officialDescription:
       "Vector space, subspaces, linear dependence and independence of vectors, matrices, projection matrix, orthogonal matrix, idempotent matrix, partition matrix and their properties, quadratic forms, systems of linear equations and solutions; Gaussian elimination, eigenvalues and eigenvectors, determinant, rank, nullity, projections, LU decomposition, singular value decomposition.",
+    learningResources: [
+      {
+        id: "la-sachin-mittal-playlist",
+        title: "Linear Algebra for Machine Learning & GATE DA (Full Playlist)",
+        url: "https://www.youtube.com/watch?v=DrCeIbpfuzE&list=PLgjejdknTfWP9cYIHjxBRRdtGcUBLmCQC",
+        type: "youtube-playlist",
+        author: "Sachin Mittal",
+        platform: "YouTube",
+        description:
+          "Official recommended comprehensive video lecture course covering Vector Spaces, Subspaces, Systems of Linear Equations, Gaussian Elimination, Matrix Inverses, Eigenvalues & Eigenvectors, Projections, SVD, and Rank-Nullity Theorem for GATE DA.",
+        embedVideoId: "DrCeIbpfuzE",
+        playlistId: "PLgjejdknTfWP9cYIHjxBRRdtGcUBLmCQC",
+        tags: ["Tier S", "Vectors", "Eigenvalues", "GATE DA", "Matrix Decompositions"]
+      }
+    ],
     subtopics: [
       { id: "vector-space-subspaces", title: "Vector Space & Subspaces" },
       { id: "linear-dependence-independence", title: "Linear Dependence & Independence of Vectors" },

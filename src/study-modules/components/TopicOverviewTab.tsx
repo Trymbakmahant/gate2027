@@ -19,6 +19,8 @@ export default function TopicOverviewTab({
   onSelectTab,
   themeMode
 }: TopicOverviewTabProps) {
+  const learningResources = module?.learningResources || section.learningResources || [];
+
   return (
     <div className="topic-overview-container">
       {/* Hero Overview Banner */}
@@ -42,6 +44,17 @@ export default function TopicOverviewTab({
 
         {/* Quick Action Launchers */}
         <div className="hero-action-buttons">
+          {learningResources.length > 0 && (
+            <button
+              type="button"
+              className="hero-action-btn video"
+              onClick={() => onSelectTab('resources')}
+            >
+              <span>▶</span>
+              <span>Watch Video Playlist</span>
+            </button>
+          )}
+
           {module?.simulation && (
             <button
               type="button"
@@ -85,6 +98,43 @@ export default function TopicOverviewTab({
           </button>
         </div>
       </div>
+
+      {/* Featured Learning Material & Video Playlist Card */}
+      {learningResources.length > 0 && (
+        <div className="learning-material-card">
+          <div className="learning-material-content">
+            <div className="mat-badge-row">
+              <span className="yt-badge">▶ YouTube Learning Material</span>
+              <span className="mat-curated-badge">Recommended Video Course</span>
+            </div>
+            <h3 className="mat-title">{learningResources[0].title}</h3>
+            {learningResources[0].author && (
+              <div className="mat-author">
+                Instructor: <strong>{learningResources[0].author}</strong> • Platform: <strong>{learningResources[0].platform || 'YouTube'}</strong>
+              </div>
+            )}
+            <p className="mat-desc">{learningResources[0].description}</p>
+          </div>
+
+          <div className="learning-material-actions">
+            <button
+              type="button"
+              className="mat-play-btn"
+              onClick={() => onSelectTab('resources')}
+            >
+              <span>▶ Watch Inside App Theater</span>
+            </button>
+            <a
+              href={learningResources[0].url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mat-yt-link-btn"
+            >
+              <span>Open on YouTube ↗</span>
+            </a>
+          </div>
+        </div>
+      )}
 
       {/* Two Column Layout: Key Takeaways & Syllabus Scope */}
       <div className="topic-details-grid">

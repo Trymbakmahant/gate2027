@@ -6,6 +6,7 @@ import { getTopicModule } from '../registry';
 import { TopicWorkspaceTab, AppThemeMode } from '../types';
 import TopicOverviewTab from './TopicOverviewTab';
 import TopicTestQuiz from './TopicTestQuiz';
+import TopicResourcesView from './TopicResourcesView';
 
 interface TopicWorkspaceViewProps {
   section: SyllabusSection;
@@ -28,6 +29,11 @@ export default function TopicWorkspaceView({
   const module = useMemo(() => {
     return getTopicModule(subtopic.id);
   }, [subtopic.id]);
+
+  // Learning resources from module or section
+  const learningResources = useMemo(() => {
+    return module?.learningResources || section.learningResources || [];
+  }, [module, section]);
 
   // Tab state
   const [activeTab, setActiveTab] = useState<TopicWorkspaceTab>('overview');
@@ -52,6 +58,15 @@ export default function TopicWorkspaceView({
     }[] = [
       { id: 'overview', label: 'Overview', icon: '📖' }
     ];
+
+    if (learningResources.length > 0) {
+      list.push({
+        id: 'resources',
+        label: 'Video Lectures',
+        icon: '📺',
+        badge: 'Playlist'
+      });
+    }
 
     if (module?.simulation) {
       list.push({
@@ -87,7 +102,7 @@ export default function TopicWorkspaceView({
     });
 
     return list;
-  }, [module, userNote]);
+  }, [module, learningResources, userNote]);
 
   return (
     <div className="topic-workspace-shell">
@@ -132,6 +147,19 @@ export default function TopicWorkspaceView({
             subtopic={subtopic}
             module={module}
             onSelectTab={setActiveTab}
+            themeMode={themeMode}
+          />
+        )}
+
+        {/* TAB: VIDEO LECTURES & PLAYLIST */}
+        {activeTab === 'resources' && learningResources.length > 0 && (
+          <TopicResourcesView
+            section={section}
+            subtopic={subtopic}
+            resources={learningResources}
+            userNote={userNote}
+            onSaveNote={onSaveNote}
+            isSavingNote={isSavingNote}
             themeMode={themeMode}
           />
         )}

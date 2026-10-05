@@ -2252,6 +2252,42 @@ export default function GateTrackerApp() {
                     </button>
                   </form>
 
+                  {MASTER_SCHEDULE.find((d) => d.id === editingDayId)?.subject === 'Linear Algebra' && (
+                    <div style={{ marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', padding: '8px 12px', background: 'var(--bg-surface-subtle)', border: '1.5px dashed var(--border-black)', borderRadius: 'var(--radius-sm)' }}>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 800 }}>💡 Recommended Playlist:</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const exists = modalLinks.some(l => l.url.includes('DrCeIbpfuzE'));
+                          if (!exists) {
+                            setModalLinks(prev => [
+                              ...prev,
+                              {
+                                id: `la-sachin-mittal-${Date.now()}`,
+                                title: 'Sachin Mittal — Linear Algebra for ML & GATE DA (Full Playlist)',
+                                url: 'https://www.youtube.com/watch?v=DrCeIbpfuzE&list=PLgjejdknTfWP9cYIHjxBRRdtGcUBLmCQC',
+                                type: 'video',
+                                addedAt: new Date()
+                              }
+                            ]);
+                          }
+                        }}
+                        style={{
+                          fontSize: '0.75rem',
+                          fontWeight: 800,
+                          background: '#fee2e2',
+                          color: '#991b1b',
+                          border: '1px solid #ef4444',
+                          padding: '4px 8px',
+                          borderRadius: '4px',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        + Pin Sachin Mittal YouTube Playlist
+                      </button>
+                    </div>
+                  )}
+
                   <div className="dialog-links-list">
                     {modalLinks.length === 0 ? (
                       <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
