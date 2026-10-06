@@ -1,0 +1,572 @@
+{
+  "title": "GATE Prep Lecture Planners",
+  "source": "PW Physics Wallah Batch Planners",
+  "lastUpdated": "2026-10-06",
+  "subjects": {
+    "dbms": {
+      "subject": "Database Management Systems (DBMS)",
+      "targetExam": "GATE CS / IT",
+      "totalSessions": 16,
+      "totalLectures": 15,
+      "noClassSessions": 1,
+      "totalDpps": 3,
+      "totalTests": 4,
+      "dateRange": {
+        "start": "2025-08-16",
+        "end": "2025-10-11"
+      },
+      "schedule": [
+        {
+          "sessionNumber": 1,
+          "lectureNumber": 1,
+          "chapter": "DBMS",
+          "topic": "DBMS",
+          "date": "Saturday, 16 August 2025",
+          "isoDate": "2025-08-16",
+          "dayOfWeek": "Saturday",
+          "dpp": null,
+          "test": null,
+          "isClass": true
+        },
+        {
+          "sessionNumber": 2,
+          "lectureNumber": 2,
+          "chapter": "DBMS",
+          "topic": "DBMS",
+          "date": "Sunday, 17 August 2025",
+          "isoDate": "2025-08-17",
+          "dayOfWeek": "Sunday",
+          "dpp": null,
+          "test": null,
+          "isClass": true
+        },
+        {
+          "sessionNumber": 3,
+          "lectureNumber": 3,
+          "chapter": "DBMS",
+          "topic": "DBMS",
+          "date": "Saturday, 23 August 2025",
+          "isoDate": "2025-08-23",
+          "dayOfWeek": "Saturday",
+          "dpp": null,
+          "test": null,
+          "isClass": true
+        },
+        {
+          "sessionNumber": 4,
+          "lectureNumber": 4,
+          "chapter": "DBMS",
+          "topic": "DBMS",
+          "date": "Sunday, 24 August 2025",
+          "isoDate": "2025-08-24",
+          "dayOfWeek": "Sunday",
+          "dpp": null,
+          "test": "WT 01 (25 Aug, 2025)",
+          "isClass": true
+        },
+        {
+          "sessionNumber": 5,
+          "lectureNumber": 5,
+          "chapter": "DBMS",
+          "topic": "DBMS",
+          "date": "Saturday, 30 August 2025",
+          "isoDate": "2025-08-30",
+          "dayOfWeek": "Saturday",
+          "dpp": "DPP 01",
+          "test": null,
+          "isClass": true
+        },
+        {
+          "sessionNumber": 6,
+          "lectureNumber": 6,
+          "chapter": "DBMS",
+          "topic": "DBMS",
+          "date": "Sunday, 31 August 2025",
+          "isoDate": "2025-08-31",
+          "dayOfWeek": "Sunday",
+          "dpp": null,
+          "test": null,
+          "isClass": true
+        },
+        {
+          "sessionNumber": 7,
+          "lectureNumber": 7,
+          "chapter": "DBMS",
+          "topic": "DBMS",
+          "date": "Saturday, 6 September 2025",
+          "isoDate": "2025-09-06",
+          "dayOfWeek": "Saturday",
+          "dpp": null,
+          "test": null,
+          "isClass": true
+        },
+        {
+          "sessionNumber": 8,
+          "lectureNumber": 8,
+          "chapter": "DBMS",
+          "topic": "DBMS",
+          "date": "Sunday, 7 September 2025",
+          "isoDate": "2025-09-07",
+          "dayOfWeek": "Sunday",
+          "dpp": null,
+          "test": "WT 02 (07 Sept. 2025)",
+          "isClass": true
+        },
+        {
+          "sessionNumber": 9,
+          "lectureNumber": 9,
+          "chapter": "DBMS",
+          "topic": "DBMS",
+          "date": "Saturday, 13 September 2025",
+          "isoDate": "2025-09-13",
+          "dayOfWeek": "Saturday",
+          "dpp": null,
+          "test": null,
+          "isClass": true
+        },
+        {
+          "sessionNumber": 10,
+          "lectureNumber": 10,
+          "chapter": "DBMS",
+          "topic": "DBMS",
+          "date": "Sunday, 14 September 2025",
+          "isoDate": "2025-09-14",
+          "dayOfWeek": "Sunday",
+          "dpp": null,
+          "test": null,
+          "isClass": true
+        },
+        {
+          "sessionNumber": 11,
+          "lectureNumber": 11,
+          "chapter": "DBMS",
+          "topic": "DBMS",
+          "date": "Sunday, 21 September 2025",
+          "isoDate": "2025-09-21",
+          "dayOfWeek": "Sunday",
+          "dpp": "DPP 02",
+          "test": "WT 03 ( 21 Sept. 2025)",
+          "isClass": true
+        },
+        {
+          "sessionNumber": 12,
+          "lectureNumber": 12,
+          "chapter": "DBMS",
+          "topic": "DBMS",
+          "date": "Saturday, 27 September 2025",
+          "isoDate": "2025-09-27",
+          "dayOfWeek": "Saturday",
+          "dpp": null,
+          "test": null,
+          "isClass": true
+        },
+        {
+          "sessionNumber": 13,
+          "lectureNumber": 13,
+          "chapter": "DBMS",
+          "topic": "DBMS",
+          "date": "Sunday, 28 September 2025",
+          "isoDate": "2025-09-28",
+          "dayOfWeek": "Sunday",
+          "dpp": null,
+          "test": null,
+          "isClass": true
+        },
+        {
+          "sessionNumber": 14,
+          "lectureNumber": 14,
+          "chapter": "DBMS",
+          "topic": "DBMS",
+          "date": "Saturday, 4 October 2025",
+          "isoDate": "2025-10-04",
+          "dayOfWeek": "Saturday",
+          "dpp": null,
+          "test": null,
+          "isClass": true
+        },
+        {
+          "sessionNumber": 15,
+          "lectureNumber": 15,
+          "chapter": "DBMS",
+          "topic": "DBMS",
+          "date": "Sunday, 5 October 2025",
+          "isoDate": "2025-10-05",
+          "dayOfWeek": "Sunday",
+          "dpp": null,
+          "test": "WT 04 ( 05 Oct, 2025)",
+          "isClass": true
+        },
+        {
+          "sessionNumber": 16,
+          "lectureNumber": null,
+          "chapter": "DBMS",
+          "topic": "No Class",
+          "date": "Saturday, 11 October 2025",
+          "isoDate": "2025-10-11",
+          "dayOfWeek": "Saturday",
+          "dpp": "DPP 03",
+          "test": null,
+          "isClass": false
+        }
+      ]
+    },
+    "probabilityAndStatistics": {
+      "subject": "Probability and Statistics",
+      "targetExam": "GATE DA (Data Science & AI)",
+      "totalLectures": 30,
+      "totalDpps": 6,
+      "totalTests": 3,
+      "dateRange": {
+        "start": "2025-09-10",
+        "end": "2025-10-30"
+      },
+      "chapters": [
+        { "name": "Permutations and Combinations", "lectures": 5 },
+        { "name": "Probability", "lectures": 6 },
+        { "name": "Statistics-1(Discrete Random Variable)", "lectures": 4 },
+        { "name": "Statistics-1(Continuous Random Variable)", "lectures": 6 },
+        { "name": "Statistics-2(Bivariate Random Variable)", "lectures": 4 },
+        { "name": "Statistics-2(Sampling and distribution)", "lectures": 5 }
+      ],
+      "schedule": [
+        {
+          "lectureNumber": 1,
+          "chapter": "Permutations and Combinations",
+          "date": "Wednesday, September 10, 2025",
+          "isoDate": "2025-09-10",
+          "dayOfWeek": "Wednesday",
+          "dpp": null,
+          "test": null
+        },
+        {
+          "lectureNumber": 2,
+          "chapter": "Permutations and Combinations",
+          "date": "Thursday, September 11, 2025",
+          "isoDate": "2025-09-11",
+          "dayOfWeek": "Thursday",
+          "dpp": "DPP 01",
+          "test": null
+        },
+        {
+          "lectureNumber": 3,
+          "chapter": "Permutations and Combinations",
+          "date": "Friday, September 12, 2025",
+          "isoDate": "2025-09-12",
+          "dayOfWeek": "Friday",
+          "dpp": null,
+          "test": null
+        },
+        {
+          "lectureNumber": 4,
+          "chapter": "Permutations and Combinations",
+          "date": "Monday, September 15, 2025",
+          "isoDate": "2025-09-15",
+          "dayOfWeek": "Monday",
+          "dpp": null,
+          "test": null
+        },
+        {
+          "lectureNumber": 5,
+          "chapter": "Permutations and Combinations",
+          "date": "Tuesday, September 16, 2025",
+          "isoDate": "2025-09-16",
+          "dayOfWeek": "Tuesday",
+          "dpp": null,
+          "test": null
+        },
+        {
+          "lectureNumber": 6,
+          "chapter": "Probability",
+          "date": "Wednesday, September 17, 2025",
+          "isoDate": "2025-09-17",
+          "dayOfWeek": "Wednesday",
+          "dpp": null,
+          "test": null
+        },
+        {
+          "lectureNumber": 7,
+          "chapter": "Probability",
+          "date": "Thursday, September 18, 2025",
+          "isoDate": "2025-09-18",
+          "dayOfWeek": "Thursday",
+          "dpp": "DPP 01",
+          "test": null
+        },
+        {
+          "lectureNumber": 8,
+          "chapter": "Probability",
+          "date": "Friday, September 19, 2025",
+          "isoDate": "2025-09-19",
+          "dayOfWeek": "Friday",
+          "dpp": null,
+          "test": null
+        },
+        {
+          "lectureNumber": 9,
+          "chapter": "Probability",
+          "date": "Monday, September 22, 2025",
+          "isoDate": "2025-09-22",
+          "dayOfWeek": "Monday",
+          "dpp": null,
+          "test": null
+        },
+        {
+          "lectureNumber": 10,
+          "chapter": "Probability",
+          "date": "Tuesday, September 23, 2025",
+          "isoDate": "2025-09-23",
+          "dayOfWeek": "Tuesday",
+          "dpp": null,
+          "test": null
+        },
+        {
+          "lectureNumber": 11,
+          "chapter": "Probability",
+          "date": "Wednesday, September 24, 2025",
+          "isoDate": "2025-09-24",
+          "dayOfWeek": "Wednesday",
+          "dpp": null,
+          "test": null
+        },
+        {
+          "lectureNumber": 12,
+          "chapter": "Statistics-1(Discrete Random Variable)",
+          "date": "Thursday, September 25, 2025",
+          "isoDate": "2025-09-25",
+          "dayOfWeek": "Thursday",
+          "dpp": "DPP 01",
+          "test": null
+        },
+        {
+          "lectureNumber": 13,
+          "chapter": "Statistics-1(Discrete Random Variable)",
+          "date": "Friday, September 26, 2025",
+          "isoDate": "2025-09-26",
+          "dayOfWeek": "Friday",
+          "dpp": null,
+          "test": "Weekly Test 01 (28.09.2025)"
+        },
+        {
+          "lectureNumber": 14,
+          "chapter": "Statistics-1(Discrete Random Variable)",
+          "date": "Monday, September 29, 2025",
+          "isoDate": "2025-09-29",
+          "dayOfWeek": "Monday",
+          "dpp": null,
+          "test": null
+        },
+        {
+          "lectureNumber": 15,
+          "chapter": "Statistics-1(Discrete Random Variable)",
+          "date": "Tuesday, September 30, 2025",
+          "isoDate": "2025-09-30",
+          "dayOfWeek": "Tuesday",
+          "dpp": null,
+          "test": null
+        },
+        {
+          "lectureNumber": 16,
+          "chapter": "Statistics-1(Continuous Random Variable)",
+          "date": "Monday, October 6, 2025",
+          "isoDate": "2025-10-06",
+          "dayOfWeek": "Monday",
+          "dpp": "DPP 01",
+          "test": null
+        },
+        {
+          "lectureNumber": 17,
+          "chapter": "Statistics-1(Continuous Random Variable)",
+          "date": "Tuesday, October 7, 2025",
+          "isoDate": "2025-10-07",
+          "dayOfWeek": "Tuesday",
+          "dpp": null,
+          "test": null
+        },
+        {
+          "lectureNumber": 18,
+          "chapter": "Statistics-1(Continuous Random Variable)",
+          "date": "Wednesday, October 8, 2025",
+          "isoDate": "2025-10-08",
+          "dayOfWeek": "Wednesday",
+          "dpp": null,
+          "test": null
+        },
+        {
+          "lectureNumber": 19,
+          "chapter": "Statistics-1(Continuous Random Variable)",
+          "date": "Thursday, October 9, 2025",
+          "isoDate": "2025-10-09",
+          "dayOfWeek": "Thursday",
+          "dpp": null,
+          "test": null
+        },
+        {
+          "lectureNumber": 20,
+          "chapter": "Statistics-1(Continuous Random Variable)",
+          "date": "Friday, October 10, 2025",
+          "isoDate": "2025-10-10",
+          "dayOfWeek": "Friday",
+          "dpp": "DPP 02",
+          "test": "Weekly Test 02 (12.10.2025)"
+        },
+        {
+          "lectureNumber": 21,
+          "chapter": "Statistics-1(Continuous Random Variable)",
+          "date": "Monday, October 13, 2025",
+          "isoDate": "2025-10-13",
+          "dayOfWeek": "Monday",
+          "dpp": null,
+          "test": null
+        },
+        {
+          "lectureNumber": 22,
+          "chapter": "Statistics-2(Bivariate Random Variable)",
+          "date": "Tuesday, October 14, 2025",
+          "isoDate": "2025-10-14",
+          "dayOfWeek": "Tuesday",
+          "dpp": null,
+          "test": null
+        },
+        {
+          "lectureNumber": 23,
+          "chapter": "Statistics-2(Bivariate Random Variable)",
+          "date": "Wednesday, October 15, 2025",
+          "isoDate": "2025-10-15",
+          "dayOfWeek": "Wednesday",
+          "dpp": null,
+          "test": null
+        },
+        {
+          "lectureNumber": 24,
+          "chapter": "Statistics-2(Bivariate Random Variable)",
+          "date": "Thursday, October 16, 2025",
+          "isoDate": "2025-10-16",
+          "dayOfWeek": "Thursday",
+          "dpp": null,
+          "test": null
+        },
+        {
+          "lectureNumber": 25,
+          "chapter": "Statistics-2(Bivariate Random Variable)",
+          "date": "Friday, October 17, 2025",
+          "isoDate": "2025-10-17",
+          "dayOfWeek": "Friday",
+          "dpp": "DPP 01",
+          "test": null
+        },
+        {
+          "lectureNumber": 26,
+          "chapter": "Statistics-2(Sampling and distribution)",
+          "date": "Friday, October 24, 2025",
+          "isoDate": "2025-10-24",
+          "dayOfWeek": "Friday",
+          "dpp": null,
+          "test": null
+        },
+        {
+          "lectureNumber": 27,
+          "chapter": "Statistics-2(Sampling and distribution)",
+          "date": "Monday, October 27, 2025",
+          "isoDate": "2025-10-27",
+          "dayOfWeek": "Monday",
+          "dpp": null,
+          "test": null
+        },
+        {
+          "lectureNumber": 28,
+          "chapter": "Statistics-2(Sampling and distribution)",
+          "date": "Tuesday, October 28, 2025",
+          "isoDate": "2025-10-28",
+          "dayOfWeek": "Tuesday",
+          "dpp": null,
+          "test": null
+        },
+        {
+          "lectureNumber": 29,
+          "chapter": "Statistics-2(Sampling and distribution)",
+          "date": "Wednesday, October 29, 2025",
+          "isoDate": "2025-10-29",
+          "dayOfWeek": "Wednesday",
+          "dpp": null,
+          "test": null
+        },
+        {
+          "lectureNumber": 30,
+          "chapter": "Statistics-2(Sampling and distribution)",
+          "date": "Thursday, October 30, 2025",
+          "isoDate": "2025-10-30",
+          "dayOfWeek": "Thursday",
+          "dpp": null,
+          "test": "Weekly Test 03 (02.11.2025)"
+        }
+      ]
+    },
+    "machineLearning": {
+      "subject": "Machine Learning",
+      "targetExam": "GATE DA (Data Science & AI)",
+      "totalLectures": 43,
+      "totalDpps": 7,
+      "totalTests": 4,
+      "dateRange": {
+        "start": "2025-08-10",
+        "end": "2025-09-28"
+      },
+      "chapters": [
+        { "name": "Regression", "lectures": 8 },
+        { "name": "Classification", "lectures": 6 },
+        { "name": "Nearest Neighbour", "lectures": 4 },
+        { "name": "Bayesian learning", "lectures": 5 },
+        { "name": "Decision Tree", "lectures": 5 },
+        { "name": "Support Vector Machines", "lectures": 5 },
+        { "name": "Bias and Variance", "lectures": 3 },
+        { "name": "Multi Layer Perceptron", "lectures": 6 },
+        { "name": "Unsupervised Learning", "lectures": 1 }
+      ],
+      "schedule": [
+        { "lectureNumber": 1, "chapter": "Regression", "date": "Sunday, 10 August 2025", "isoDate": "2025-08-10", "dayOfWeek": "Sunday", "dpp": null, "test": null },
+        { "lectureNumber": 2, "chapter": "Regression", "date": "Monday, 11 August 2025", "isoDate": "2025-08-11", "dayOfWeek": "Monday", "dpp": null, "test": null },
+        { "lectureNumber": 3, "chapter": "Regression", "date": "Tuesday, 12 August 2025", "isoDate": "2025-08-12", "dayOfWeek": "Tuesday", "dpp": null, "test": null },
+        { "lectureNumber": 4, "chapter": "Regression", "date": "Wednesday, 13 August 2025", "isoDate": "2025-08-13", "dayOfWeek": "Wednesday", "dpp": null, "test": null },
+        { "lectureNumber": 5, "chapter": "Regression", "date": "Thursday, 14 August 2025", "isoDate": "2025-08-14", "dayOfWeek": "Thursday", "dpp": null, "test": null },
+        { "lectureNumber": 6, "chapter": "Regression", "date": "Saturday, 16 August 2025", "isoDate": "2025-08-16", "dayOfWeek": "Saturday", "dpp": null, "test": null },
+        { "lectureNumber": 7, "chapter": "Regression", "date": "Sunday, 17 August 2025", "isoDate": "2025-08-17", "dayOfWeek": "Sunday", "dpp": null, "test": "WeeklyTest -1" },
+        { "lectureNumber": 8, "chapter": "Regression", "date": "Monday, 18 August 2025", "isoDate": "2025-08-18", "dayOfWeek": "Monday", "dpp": null, "test": null },
+        { "lectureNumber": 9, "chapter": "Classification", "date": "Tuesday, 19 August 2025", "isoDate": "2025-08-19", "dayOfWeek": "Tuesday", "dpp": "DPP", "test": null },
+        { "lectureNumber": 10, "chapter": "Classification", "date": "Wednesday, 20 August 2025", "isoDate": "2025-08-20", "dayOfWeek": "Wednesday", "dpp": null, "test": null },
+        { "lectureNumber": 11, "chapter": "Classification", "date": "Thursday, 21 August 2025", "isoDate": "2025-08-21", "dayOfWeek": "Thursday", "dpp": null, "test": null },
+        { "lectureNumber": 12, "chapter": "Classification", "date": "Saturday, 23 August 2025", "isoDate": "2025-08-23", "dayOfWeek": "Saturday", "dpp": null, "test": null },
+        { "lectureNumber": 13, "chapter": "Classification", "date": "Sunday, 24 August 2025", "isoDate": "2025-08-24", "dayOfWeek": "Sunday", "dpp": null, "test": null },
+        { "lectureNumber": 14, "chapter": "Classification", "date": "Monday, 25 August 2025", "isoDate": "2025-08-25", "dayOfWeek": "Monday", "dpp": "DPP", "test": null },
+        { "lectureNumber": 15, "chapter": "Nearest Neighbour", "date": "Tuesday, 26 August 2025", "isoDate": "2025-08-26", "dayOfWeek": "Tuesday", "dpp": null, "test": null },
+        { "lectureNumber": 16, "chapter": "Nearest Neighbour", "date": "Wednesday, 27 August 2025", "isoDate": "2025-08-27", "dayOfWeek": "Wednesday", "dpp": null, "test": null },
+        { "lectureNumber": 17, "chapter": "Nearest Neighbour", "date": "Thursday, 28 August 2025", "isoDate": "2025-08-28", "dayOfWeek": "Thursday", "dpp": null, "test": null },
+        { "lectureNumber": 18, "chapter": "Nearest Neighbour", "date": "Saturday, 30 August 2025", "isoDate": "2025-08-30", "dayOfWeek": "Saturday", "dpp": null, "test": null },
+        { "lectureNumber": 19, "chapter": "Bayesian learning", "date": "Sunday, 31 August 2025", "isoDate": "2025-08-31", "dayOfWeek": "Sunday", "dpp": "DPP", "test": "WeeklyTest -2" },
+        { "lectureNumber": 20, "chapter": "Bayesian learning", "date": "Monday, 1 September 2025", "isoDate": "2025-09-01", "dayOfWeek": "Monday", "dpp": null, "test": null },
+        { "lectureNumber": 21, "chapter": "Bayesian learning", "date": "Tuesday, 2 September 2025", "isoDate": "2025-09-02", "dayOfWeek": "Tuesday", "dpp": null, "test": null },
+        { "lectureNumber": 22, "chapter": "Bayesian learning", "date": "Wednesday, 3 September 2025", "isoDate": "2025-09-03", "dayOfWeek": "Wednesday", "dpp": null, "test": null },
+        { "lectureNumber": 23, "chapter": "Bayesian learning", "date": "Thursday, 4 September 2025", "isoDate": "2025-09-04", "dayOfWeek": "Thursday", "dpp": null, "test": null },
+        { "lectureNumber": 24, "chapter": "Decision Tree", "date": "Saturday, 6 September 2025", "isoDate": "2025-09-06", "dayOfWeek": "Saturday", "dpp": "DPP", "test": null },
+        { "lectureNumber": 25, "chapter": "Decision Tree", "date": "Sunday, 7 September 2025", "isoDate": "2025-09-07", "dayOfWeek": "Sunday", "dpp": null, "test": null },
+        { "lectureNumber": 26, "chapter": "Decision Tree", "date": "Monday, 8 September 2025", "isoDate": "2025-09-08", "dayOfWeek": "Monday", "dpp": null, "test": null },
+        { "lectureNumber": 27, "chapter": "Decision Tree", "date": "Tuesday, 9 September 2025", "isoDate": "2025-09-09", "dayOfWeek": "Tuesday", "dpp": null, "test": null },
+        { "lectureNumber": 28, "chapter": "Decision Tree", "date": "Wednesday, 10 September 2025", "isoDate": "2025-09-10", "dayOfWeek": "Wednesday", "dpp": null, "test": null },
+        { "lectureNumber": 29, "chapter": "Support Vector Machines", "date": "Thursday, 11 September 2025", "isoDate": "2025-09-11", "dayOfWeek": "Thursday", "dpp": null, "test": null },
+        { "lectureNumber": 30, "chapter": "Support Vector Machines", "date": "Saturday, 13 September 2025", "isoDate": "2025-09-13", "dayOfWeek": "Saturday", "dpp": "DPP", "test": null },
+        { "lectureNumber": 31, "chapter": "Support Vector Machines", "date": "Sunday, 14 September 2025", "isoDate": "2025-09-14", "dayOfWeek": "Sunday", "dpp": null, "test": null },
+        { "lectureNumber": 32, "chapter": "Support Vector Machines", "date": "Monday, 15 September 2025", "isoDate": "2025-09-15", "dayOfWeek": "Monday", "dpp": null, "test": null },
+        { "lectureNumber": 33, "chapter": "Support Vector Machines", "date": "Tuesday, 16 September 2025", "isoDate": "2025-09-16", "dayOfWeek": "Tuesday", "dpp": null, "test": null },
+        { "lectureNumber": 34, "chapter": "Bias and Variance", "date": "Wednesday, 17 September 2025", "isoDate": "2025-09-17", "dayOfWeek": "Wednesday", "dpp": null, "test": null },
+        { "lectureNumber": 35, "chapter": "Bias and Variance", "date": "Thursday, 18 September 2025", "isoDate": "2025-09-18", "dayOfWeek": "Thursday", "dpp": null, "test": null },
+        { "lectureNumber": 36, "chapter": "Bias and Variance", "date": "Saturday, 20 September 2025", "isoDate": "2025-09-20", "dayOfWeek": "Saturday", "dpp": "DPP", "test": null },
+        { "lectureNumber": 37, "chapter": "Multi Layer Perceptron", "date": "Sunday, 21 September 2025", "isoDate": "2025-09-21", "dayOfWeek": "Sunday", "dpp": null, "test": "WeeklyTest -3" },
+        { "lectureNumber": 38, "chapter": "Multi Layer Perceptron", "date": "Monday, 22 September 2025", "isoDate": "2025-09-22", "dayOfWeek": "Monday", "dpp": null, "test": null },
+        { "lectureNumber": 39, "chapter": "Multi Layer Perceptron", "date": "Tuesday, 23 September 2025", "isoDate": "2025-09-23", "dayOfWeek": "Tuesday", "dpp": null, "test": null },
+        { "lectureNumber": 40, "chapter": "Multi Layer Perceptron", "date": "Wednesday, 24 September 2025", "isoDate": "2025-09-24", "dayOfWeek": "Wednesday", "dpp": null, "test": null },
+        { "lectureNumber": 41, "chapter": "Multi Layer Perceptron", "date": "Thursday, 25 September 2025", "isoDate": "2025-09-25", "dayOfWeek": "Thursday", "dpp": null, "test": null },
+        { "lectureNumber": 42, "chapter": "Multi Layer Perceptron", "date": "Saturday, 27 September 2025", "isoDate": "2025-09-27", "dayOfWeek": "Saturday", "dpp": null, "test": null },
+        { "lectureNumber": 43, "chapter": "Unsupervised Learning", "date": "Sunday, 28 September 2025", "isoDate": "2025-09-28", "dayOfWeek": "Sunday", "dpp": "DPP", "test": "WeeklyTest -4" }
+      ]
+    }
+  }
+}
