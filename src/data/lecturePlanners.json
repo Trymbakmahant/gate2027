@@ -625,6 +625,135 @@
         { "lectureNumber": 37, "chapter": "Miscellaneous", "date": "Monday, 17 November 2025", "isoDate": "2025-11-17", "dayOfWeek": "Monday", "dpp": null, "test": null },
         { "lectureNumber": 38, "chapter": "Miscellaneous", "date": "Tuesday, 18 November 2025", "isoDate": "2025-11-18", "dayOfWeek": "Tuesday", "dpp": null, "test": null }
       ]
+    },
+    "dataStructuresPython": {
+      "subject": "Data Structure Through Python",
+      "targetExam": "GATE CS & DA",
+      "totalLectures": 33,
+      "totalDpps": 4,
+      "totalTests": 0,
+      "dateRange": {
+        "start": "2025-07-09",
+        "end": "2025-08-10"
+      },
+      "chapters": [
+        { "name": "Lists and Arrays", "lectures": 4 },
+        { "name": "Stack", "lectures": 7 },
+        { "name": "Queues and Hash Tables", "lectures": 7 },
+        { "name": "Linked Lists", "lectures": 7 },
+        { "name": "Trees", "lectures": 7 },
+        { "name": "Practice Session", "lectures": 1 }
+      ],
+      "schedule": [
+        { "lectureNumber": 1, "chapter": "Lists and Arrays", "date": "Wednesday, July 9, 2025", "isoDate": "2025-07-09", "dayOfWeek": "Wednesday", "timing": "6:30 AM - 7:30 AM", "dpp": null, "test": null },
+        { "lectureNumber": 2, "chapter": "Lists and Arrays", "date": "Thursday, July 10, 2025", "isoDate": "2025-07-10", "dayOfWeek": "Thursday", "timing": "6:30 AM - 7:30 AM", "dpp": null, "test": null },
+        { "lectureNumber": 3, "chapter": "Lists and Arrays", "date": "Friday, July 11, 2025", "isoDate": "2025-07-11", "dayOfWeek": "Friday", "timing": "6:30 AM - 7:30 AM", "dpp": null, "test": null },
+        { "lectureNumber": 4, "chapter": "Lists and Arrays", "date": "Saturday, July 12, 2025", "isoDate": "2025-07-12", "dayOfWeek": "Saturday", "timing": "6:30 AM - 7:30 AM", "dpp": null, "test": null },
+        { "lectureNumber": 5, "chapter": "Stack", "date": "Sunday, July 13, 2025", "isoDate": "2025-07-13", "dayOfWeek": "Sunday", "timing": "6:30 AM - 7:30 AM", "dpp": null, "test": null },
+        { "lectureNumber": 6, "chapter": "Stack", "date": "Monday, July 14, 2025", "isoDate": "2025-07-14", "dayOfWeek": "Monday", "timing": "6:30 AM - 7:30 AM", "dpp": "DPP 01", "test": null },
+        { "lectureNumber": 7, "chapter": "Stack", "date": "Tuesday, July 15, 2025", "isoDate": "2025-07-15", "dayOfWeek": "Tuesday", "timing": "6:30 AM - 7:30 AM", "dpp": null, "test": null },
+        { "lectureNumber": 8, "chapter": "Stack", "date": "Wednesday, July 16, 2025", "isoDate": "2025-07-16", "dayOfWeek": "Wednesday", "timing": "6:30 AM - 7:30 AM", "dpp": null, "test": null },
+        { "lectureNumber": 9, "chapter": "Stack", "date": "Thursday, July 17, 2025", "isoDate": "2025-07-17", "dayOfWeek": "Thursday", "timing": "6:30 AM - 7:30 AM", "dpp": null, "test": null },
+        { "lectureNumber": 10, "chapter": "Stack", "date": "Friday, July 18, 2025", "isoDate": "2025-07-18", "dayOfWeek": "Friday", "timing": "6:30 AM - 7:30 AM", "dpp": null, "test": null },
+        { "lectureNumber": 11, "chapter": "Stack", "date": "Saturday, July 19, 2025", "isoDate": "2025-07-19", "dayOfWeek": "Saturday", "timing": "8AM - 11 AM", "dpp": null, "test": null },
+        { "lectureNumber": 12, "chapter": "Queues and Hash Tables", "date": "Sunday, July 20, 2025", "isoDate": "2025-07-20", "dayOfWeek": "Sunday", "timing": "8AM - 11 AM", "dpp": null, "test": null },
+        { "lectureNumber": 13, "chapter": "Queues and Hash Tables", "date": "Monday, July 21, 2025", "isoDate": "2025-07-21", "dayOfWeek": "Monday", "timing": "6:30 AM - 7:30 AM", "dpp": null, "test": null },
+        { "lectureNumber": 14, "chapter": "Queues and Hash Tables", "date": "Tuesday, July 22, 2025", "isoDate": "2025-07-22", "dayOfWeek": "Tuesday", "timing": "6:30 AM - 7:30 AM", "dpp": null, "test": null },
+        { "lectureNumber": 15, "chapter": "Queues and Hash Tables", "date": "Wednesday, July 23, 2025", "isoDate": "2025-07-23", "dayOfWeek": "Wednesday", "timing": "6:30 AM - 7:30 AM", "dpp": "DPP 01", "test": null },
+        { "lectureNumber": 16, "chapter": "Queues and Hash Tables", "date": "Thursday, July 24, 2025", "isoDate": "2025-07-24", "dayOfWeek": "Thursday", "timing": "6:30 AM - 7:30 AM", "dpp": null, "test": null },
+        { "lectureNumber": 17, "chapter": "Queues and Hash Tables", "date": "Friday, July 25, 2025", "isoDate": "2025-07-25", "dayOfWeek": "Friday", "timing": "6:30 AM - 7:30 AM", "dpp": null, "test": null },
+        { "lectureNumber": 18, "chapter": "Queues and Hash Tables", "date": "Saturday, July 26, 2025", "isoDate": "2025-07-26", "dayOfWeek": "Saturday", "timing": "8AM - 11 AM", "dpp": null, "test": null },
+        { "lectureNumber": 19, "chapter": "Linked Lists", "date": "Sunday, July 27, 2025", "isoDate": "2025-07-27", "dayOfWeek": "Sunday", "timing": "8AM - 11 AM", "dpp": null, "test": null },
+        { "lectureNumber": 20, "chapter": "Linked Lists", "date": "Monday, July 28, 2025", "isoDate": "2025-07-28", "dayOfWeek": "Monday", "timing": "6:30 AM - 7:30 AM", "dpp": null, "test": null },
+        { "lectureNumber": 21, "chapter": "Linked Lists", "date": "Tuesday, July 29, 2025", "isoDate": "2025-07-29", "dayOfWeek": "Tuesday", "timing": "6:30 AM - 7:30 AM", "dpp": null, "test": null },
+        { "lectureNumber": 22, "chapter": "Linked Lists", "date": "Wednesday, July 30, 2025", "isoDate": "2025-07-30", "dayOfWeek": "Wednesday", "timing": "6:30 AM - 7:30 AM", "dpp": "DPP 01", "test": null },
+        { "lectureNumber": 23, "chapter": "Linked Lists", "date": "Thursday, July 31, 2025", "isoDate": "2025-07-31", "dayOfWeek": "Thursday", "timing": "6:30 AM - 7:30 AM", "dpp": null, "test": null },
+        { "lectureNumber": 24, "chapter": "Linked Lists", "date": "Friday, August 1, 2025", "isoDate": "2025-08-01", "dayOfWeek": "Friday", "timing": "6:30 AM - 7:30 AM", "dpp": null, "test": null },
+        { "lectureNumber": 25, "chapter": "Linked Lists", "date": "Saturday, August 2, 2025", "isoDate": "2025-08-02", "dayOfWeek": "Saturday", "timing": "8AM - 10 AM", "dpp": null, "test": null },
+        { "lectureNumber": 26, "chapter": "Trees", "date": "Sunday, August 3, 2025", "isoDate": "2025-08-03", "dayOfWeek": "Sunday", "timing": "8AM - 11 AM", "dpp": null, "test": null },
+        { "lectureNumber": 27, "chapter": "Trees", "date": "Monday, August 4, 2025", "isoDate": "2025-08-04", "dayOfWeek": "Monday", "timing": "6:30 AM - 7:30 AM", "dpp": null, "test": null },
+        { "lectureNumber": 28, "chapter": "Trees", "date": "Tuesday, August 5, 2025", "isoDate": "2025-08-05", "dayOfWeek": "Tuesday", "timing": "6:30 AM - 7:30 AM", "dpp": null, "test": null },
+        { "lectureNumber": 29, "chapter": "Trees", "date": "Wednesday, August 6, 2025", "isoDate": "2025-08-06", "dayOfWeek": "Wednesday", "timing": "6:30 AM - 7:30 AM", "dpp": "DPP 01", "test": null },
+        { "lectureNumber": 30, "chapter": "Trees", "date": "Thursday, August 7, 2025", "isoDate": "2025-08-07", "dayOfWeek": "Thursday", "timing": "6:30 AM - 7:30 AM", "dpp": null, "test": null },
+        { "lectureNumber": 31, "chapter": "Trees", "date": "Friday, August 8, 2025", "isoDate": "2025-08-08", "dayOfWeek": "Friday", "timing": "6:30 AM - 7:30 AM", "dpp": null, "test": null },
+        { "lectureNumber": 32, "chapter": "Trees", "date": "Saturday, August 9, 2025", "isoDate": "2025-08-09", "dayOfWeek": "Saturday", "timing": "8AM - 11 AM", "dpp": null, "test": null },
+        { "lectureNumber": 33, "chapter": "Practice Session", "date": "Sunday, August 10, 2025", "isoDate": "2025-08-10", "dayOfWeek": "Sunday", "timing": "8AM - 11 AM", "dpp": null, "test": null }
+      ]
+    },
+    "linearAlgebra": {
+      "subject": "Linear Algebra",
+      "targetExam": "GATE DS and AI",
+      "totalLectures": 20,
+      "totalDpps": 4,
+      "totalTests": 1,
+      "dateRange": {
+        "start": "2025-07-21",
+        "end": "2025-08-14"
+      },
+      "chapters": [
+        { "name": "Linear algebra-1", "lectures": 13 },
+        { "name": "Linear algebra-2", "lectures": 7 }
+      ],
+      "schedule": [
+        { "lectureNumber": 1, "chapter": "Linear algebra-1", "date": "Monday, July 21, 2025", "isoDate": "2025-07-21", "dayOfWeek": "Monday", "timing": "3.30 PM - 6PM", "dpp": null, "test": null },
+        { "lectureNumber": 2, "chapter": "Linear algebra-1", "date": "Tuesday, July 22, 2025", "isoDate": "2025-07-22", "dayOfWeek": "Tuesday", "timing": "3.30 PM - 6PM", "dpp": null, "test": null },
+        { "lectureNumber": 3, "chapter": "Linear algebra-1", "date": "Wednesday, July 23, 2025", "isoDate": "2025-07-23", "dayOfWeek": "Wednesday", "timing": "3.30 PM - 6PM", "dpp": "DPP01", "test": null },
+        { "lectureNumber": 4, "chapter": "Linear algebra-1", "date": "Thursday, July 24, 2025", "isoDate": "2025-07-24", "dayOfWeek": "Thursday", "timing": "3.30 PM - 6PM", "dpp": null, "test": null },
+        { "lectureNumber": 5, "chapter": "Linear algebra-1", "date": "Friday, July 25, 2025", "isoDate": "2025-07-25", "dayOfWeek": "Friday", "timing": "3.30 PM - 6PM", "dpp": null, "test": null },
+        { "lectureNumber": 6, "chapter": "Linear algebra-1", "date": "Monday, July 28, 2025", "isoDate": "2025-07-28", "dayOfWeek": "Monday", "timing": "3.30 PM - 6PM", "dpp": null, "test": null },
+        { "lectureNumber": 7, "chapter": "Linear algebra-1", "date": "Tuesday, July 29, 2025", "isoDate": "2025-07-29", "dayOfWeek": "Tuesday", "timing": "3.30 PM - 6PM", "dpp": null, "test": null },
+        { "lectureNumber": 8, "chapter": "Linear algebra-1", "date": "Wednesday, July 30, 2025", "isoDate": "2025-07-30", "dayOfWeek": "Wednesday", "timing": "3.30 PM - 6PM", "dpp": "DPP02", "test": null },
+        { "lectureNumber": 9, "chapter": "Linear algebra-1", "date": "Thursday, July 31, 2025", "isoDate": "2025-07-31", "dayOfWeek": "Thursday", "timing": "3.30 PM - 6PM", "dpp": null, "test": null },
+        { "lectureNumber": 10, "chapter": "Linear algebra-1", "date": "Friday, August 1, 2025", "isoDate": "2025-08-01", "dayOfWeek": "Friday", "timing": "3.30 PM - 6PM", "dpp": null, "test": null },
+        { "lectureNumber": 11, "chapter": "Linear algebra-1", "date": "Monday, August 4, 2025", "isoDate": "2025-08-04", "dayOfWeek": "Monday", "timing": "11 AM - 1.30 PM", "dpp": null, "test": null },
+        { "lectureNumber": 12, "chapter": "Linear algebra-1", "date": "Tuesday, August 5, 2025", "isoDate": "2025-08-05", "dayOfWeek": "Tuesday", "timing": "11 AM - 1.30 PM", "dpp": "DPP03", "test": null },
+        { "lectureNumber": 13, "chapter": "Linear algebra-1", "date": "Wednesday, August 6, 2025", "isoDate": "2025-08-06", "dayOfWeek": "Wednesday", "timing": "11 AM - 1.30 PM", "dpp": null, "test": null },
+        { "lectureNumber": 14, "chapter": "Linear algebra-2", "date": "Thursday, August 7, 2025", "isoDate": "2025-08-07", "dayOfWeek": "Thursday", "timing": "11 AM - 1.30 PM", "dpp": null, "test": null },
+        { "lectureNumber": 15, "chapter": "Linear algebra-2", "date": "Friday, August 8, 2025", "isoDate": "2025-08-08", "dayOfWeek": "Friday", "timing": "11 AM - 1.30 PM", "dpp": null, "test": null },
+        { "lectureNumber": 16, "chapter": "Linear algebra-2", "date": "Saturday, August 9, 2025", "isoDate": "2025-08-09", "dayOfWeek": "Saturday", "timing": "11 AM - 1.30 PM", "dpp": null, "test": null },
+        { "lectureNumber": 17, "chapter": "Linear algebra-2", "date": "Monday, August 11, 2025", "isoDate": "2025-08-11", "dayOfWeek": "Monday", "timing": "11 AM - 1.30 PM", "dpp": null, "test": null },
+        { "lectureNumber": 18, "chapter": "Linear algebra-2", "date": "Tuesday, August 12, 2025", "isoDate": "2025-08-12", "dayOfWeek": "Tuesday", "timing": "11 AM - 1.30 PM", "dpp": "DPP04", "test": null },
+        { "lectureNumber": 19, "chapter": "Linear algebra-2", "date": "Wednesday, August 13, 2025", "isoDate": "2025-08-13", "dayOfWeek": "Wednesday", "timing": "11 AM - 1.30 PM", "dpp": null, "test": null },
+        { "lectureNumber": 20, "chapter": "Linear algebra-2", "date": "Thursday, August 14, 2025", "isoDate": "2025-08-14", "dayOfWeek": "Thursday", "timing": "11 AM - 1.30 PM", "dpp": null, "test": "WT01 (Linear)" }
+      ]
+    },
+    "calculusAndOptimization": {
+      "subject": "Calculus and Optimization",
+      "targetExam": "GATE Computer Science & DA",
+      "totalLectures": 16,
+      "totalDpps": 2,
+      "totalTests": 2,
+      "dateRange": {
+        "start": "2025-08-18",
+        "end": "2025-09-08"
+      },
+      "chapters": [
+        { "name": "Functions & Graphs", "lectures": 2 },
+        { "name": "Limit, continuity & differentiability", "lectures": 4 },
+        { "name": "Taylor & Maclaurin series", "lectures": 1 },
+        { "name": "Mean value theorems", "lectures": 1 },
+        { "name": "Derivatives & their types", "lectures": 3 },
+        { "name": "Maxima & minima", "lectures": 3 },
+        { "name": "Integration", "lectures": 2 }
+      ],
+      "schedule": [
+        { "lectureNumber": 1, "chapter": "Functions & Graphs", "date": "Monday, August 18, 2025", "isoDate": "2025-08-18", "dayOfWeek": "Monday", "dpp": null, "test": null },
+        { "lectureNumber": 2, "chapter": "Functions & Graphs", "date": "Tuesday, August 19, 2025", "isoDate": "2025-08-19", "dayOfWeek": "Tuesday", "dpp": null, "test": null },
+        { "lectureNumber": 3, "chapter": "Limit, continuity & differentiability", "date": "Wednesday, August 20, 2025", "isoDate": "2025-08-20", "dayOfWeek": "Wednesday", "dpp": null, "test": null },
+        { "lectureNumber": 4, "chapter": "Limit, continuity & differentiability", "date": "Thursday, August 21, 2025", "isoDate": "2025-08-21", "dayOfWeek": "Thursday", "dpp": null, "test": null },
+        { "lectureNumber": 5, "chapter": "Limit, continuity & differentiability", "date": "Friday, August 22, 2025", "isoDate": "2025-08-22", "dayOfWeek": "Friday", "dpp": "DPP01", "test": null },
+        { "lectureNumber": 6, "chapter": "Limit, continuity & differentiability", "date": "Monday, August 25, 2025", "isoDate": "2025-08-25", "dayOfWeek": "Monday", "dpp": null, "test": null },
+        { "lectureNumber": 7, "chapter": "Taylor & Maclaurin series", "date": "Tuesday, August 26, 2025", "isoDate": "2025-08-26", "dayOfWeek": "Tuesday", "dpp": null, "test": null },
+        { "lectureNumber": 8, "chapter": "Mean value theorems", "date": "Wednesday, August 27, 2025", "isoDate": "2025-08-27", "dayOfWeek": "Wednesday", "dpp": null, "test": null },
+        { "lectureNumber": 9, "chapter": "Derivatives & their types", "date": "Thursday, August 28, 2025", "isoDate": "2025-08-28", "dayOfWeek": "Thursday", "dpp": null, "test": null },
+        { "lectureNumber": 10, "chapter": "Derivatives & their types", "date": "Friday, August 29, 2025", "isoDate": "2025-08-29", "dayOfWeek": "Friday", "dpp": null, "test": "Weekly Test 01 (Sunday, August 31, 2025)" },
+        { "lectureNumber": 11, "chapter": "Derivatives & their types", "date": "Monday, September 1, 2025", "isoDate": "2025-09-01", "dayOfWeek": "Monday", "dpp": "DPP02", "test": null },
+        { "lectureNumber": 12, "chapter": "Maxima & minima", "date": "Tuesday, September 2, 2025", "isoDate": "2025-09-02", "dayOfWeek": "Tuesday", "dpp": null, "test": null },
+        { "lectureNumber": 13, "chapter": "Maxima & minima", "date": "Wednesday, September 3, 2025", "isoDate": "2025-09-03", "dayOfWeek": "Wednesday", "dpp": null, "test": null },
+        { "lectureNumber": 14, "chapter": "Maxima & minima", "date": "Thursday, September 4, 2025", "isoDate": "2025-09-04", "dayOfWeek": "Thursday", "dpp": null, "test": null },
+        { "lectureNumber": 15, "chapter": "Integration", "date": "Friday, September 5, 2025", "isoDate": "2025-09-05", "dayOfWeek": "Friday", "dpp": null, "test": null },
+        { "lectureNumber": 16, "chapter": "Integration", "date": "Monday, September 8, 2025", "isoDate": "2025-09-08", "dayOfWeek": "Monday", "dpp": null, "test": "Weekly Test 02 (Sunday, September 7, 2025)" }
+      ]
     }
   }
 }

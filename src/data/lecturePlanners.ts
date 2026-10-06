@@ -8,6 +8,7 @@ export interface LectureSession {
   date: string;
   isoDate: string;
   dayOfWeek: string;
+  timing?: string;
   dpp: string | null;
   test: string | null;
   isClass?: boolean;
@@ -43,11 +44,23 @@ export interface LecturePlannersCollection {
     probabilityAndStatistics: SubjectLecturePlanner;
     machineLearning: SubjectLecturePlanner;
     artificialIntelligence: SubjectLecturePlanner;
+    dataStructuresPython: SubjectLecturePlanner;
+    linearAlgebra: SubjectLecturePlanner;
+    calculusAndOptimization: SubjectLecturePlanner;
   };
 }
 
+export type SubjectPlannerKey =
+  | 'dbms'
+  | 'probabilityAndStatistics'
+  | 'machineLearning'
+  | 'artificialIntelligence'
+  | 'dataStructuresPython'
+  | 'linearAlgebra'
+  | 'calculusAndOptimization';
+
 export const LECTURE_PLANNERS = lecturePlannersData as unknown as LecturePlannersCollection;
 
-export function getSubjectPlanner(subjectKey: 'dbms' | 'probabilityAndStatistics' | 'machineLearning' | 'artificialIntelligence'): SubjectLecturePlanner {
+export function getSubjectPlanner(subjectKey: SubjectPlannerKey): SubjectLecturePlanner {
   return LECTURE_PLANNERS.subjects[subjectKey];
 }
