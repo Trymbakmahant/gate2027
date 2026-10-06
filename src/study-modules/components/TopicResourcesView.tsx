@@ -55,14 +55,40 @@ export default function TopicResourcesView({
 
   return (
     <div className="topic-resources-container">
+      {/* Multi-resource switcher if more than 1 resource is available */}
+      {resources.length > 1 && (
+        <div className="resource-selector-tabs">
+          {resources.map((res) => (
+            <button
+              key={res.id}
+              type="button"
+              className={`res-select-btn ${res.id === activeResource.id ? 'active' : ''}`}
+              onClick={() => setSelectedResourceId(res.id)}
+            >
+              <span>{res.type === 'article' ? '📖' : '📺'}</span>
+              <span>{res.title}</span>
+              <span className="res-type-pill">{res.platform || res.type}</span>
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* Header Banner */}
       <div className="resources-header-card">
         <div className="resources-header-left">
           <div className="resources-badge-row">
-            <span className="yt-badge">▶ YouTube Learning Material</span>
+            {activeResource.type === 'article' ? (
+              <span className="yt-badge" style={{ background: '#059669', borderColor: '#047857' }}>
+                📖 Revision Guide Article
+              </span>
+            ) : (
+              <span className="yt-badge">▶ YouTube Learning Material</span>
+            )}
             <span className="res-section-badge">Section {section.sectionNumber}: {section.title}</span>
             {activeResource.author && (
-              <span className="res-author-badge">Instructor: {activeResource.author}</span>
+              <span className="res-author-badge">
+                {activeResource.type === 'article' ? 'Source' : 'Instructor'}: {activeResource.author}
+              </span>
             )}
           </div>
           <h2 className="resources-title">{activeResource.title}</h2>
@@ -75,8 +101,9 @@ export default function TopicResourcesView({
             target="_blank"
             rel="noopener noreferrer"
             className="open-yt-btn"
+            style={activeResource.type === 'article' ? { background: '#059669', borderColor: '#047857' } : undefined}
           >
-            <span>Open on YouTube</span>
+            <span>{activeResource.type === 'article' ? 'Open on GeeksforGeeks' : 'Open on YouTube'}</span>
             <span>↗</span>
           </a>
           <button
@@ -91,44 +118,113 @@ export default function TopicResourcesView({
 
       {/* Main Theater & Notes Workspace */}
       <div className={`resources-theater-grid ${showNotesDrawer ? 'with-notes' : 'full-width'}`}>
-        {/* Video Player Box */}
-        <div className="video-player-card">
-          <div className="video-iframe-wrap">
-            <iframe
-              src={getEmbedUrl(activeResource)}
-              title={activeResource.title}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-              className="video-iframe"
-            />
-          </div>
+        {/* If Article Type: Interactive Revision Hub */}
+        {activeResource.type === 'article' ? (
+          <div className="video-player-card article-hub-card">
+            <div className="article-hero-box">
+              <div className="article-badge-strip">
+                <span className="gfg-badge-tag">GEEKSFORGEEKS REVISION GUIDE</span>
+                <span className="curated-badge-tag">Tier S Master Resource</span>
+              </div>
+              <h3 className="article-hub-title">{activeResource.title}</h3>
+              <p className="article-hub-desc">{activeResource.description}</p>
 
-          <div className="video-player-footer">
-            <div className="playlist-meta">
-              <span className="meta-item">
-                <strong>Platform:</strong> {activeResource.platform || 'YouTube'}
-              </span>
-              {activeResource.playlistId && (
-                <span className="meta-item">
-                  <strong>Type:</strong> Full Series Playlist
-                </span>
-              )}
-              <span className="meta-item">
-                <strong>Current Subtopic:</strong> {subtopic.title}
-              </span>
+              <div className="article-hub-action">
+                <a
+                  href={activeResource.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="article-direct-btn"
+                >
+                  <span>Launch GeeksforGeeks Article</span>
+                  <span className="direct-arrow">↗</span>
+                </a>
+                <span className="article-url-hint">{activeResource.url}</span>
+              </div>
             </div>
 
-            {activeResource.tags && (
-              <div className="resource-tags-row">
-                {activeResource.tags.map((tag, idx) => (
-                  <span key={idx} className="resource-tag-pill">
-                    #{tag}
-                  </span>
-                ))}
+            <div className="article-key-topics-box">
+              <span className="topics-box-tag">🎯 HIGH-YIELD REVISION CHECKLIST</span>
+              <ul className="article-checklist">
+                <li>
+                  <strong>Definition &amp; Dimension:</strong> A matrix is a rectangular array of numbers arranged into $m$ rows and $n$ columns ($m \times n$).
+                </li>
+                <li>
+                  <strong>Core Types of Matrices:</strong> Row matrix ($1 \times n$), Column matrix ($m \times 1$), Square matrix ($n \times n$), Diagonal matrix ($a_{'{'}ij{'}'}=0$ for $i \neq j$), Scalar matrix, and Identity matrix $I_n$.
+                </li>
+                <li>
+                  <strong>Symmetric &amp; Skew-Symmetric:</strong> Symmetric if $A^T = A$ ($a_{'{'}ij{'}'} = a_{'{'}ji{'}'}$). Skew-symmetric if $A^T = -A$ ($a_{'{'}ij{'}'} = -a_{'{'}ji{'}'}$, with all diagonal elements $a_{'{'}ii{'}'} = 0$).
+                </li>
+                <li>
+                  <strong>Matrix Multiplication Compatibility:</strong> $AB$ is defined iff columns of $A$ = rows of $B$. Note: $AB \neq BA$ in general!
+                </li>
+                <li>
+                  <strong>Transpose Reversal Law:</strong> $(A^T)^T = A$, $(A+B)^T = A^T+B^T$, and critically $(AB)^T = B^T A^T$.
+                </li>
+              </ul>
+            </div>
+
+            <div className="video-player-footer">
+              <div className="playlist-meta">
+                <span className="meta-item">
+                  <strong>Platform:</strong> {activeResource.platform || 'GeeksforGeeks'}
+                </span>
+                <span className="meta-item">
+                  <strong>Topic:</strong> {subtopic.title}
+                </span>
               </div>
-            )}
+
+              {activeResource.tags && (
+                <div className="resource-tags-row">
+                  {activeResource.tags.map((tag, idx) => (
+                    <span key={idx} className="resource-tag-pill">
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        ) : (
+          /* If Video Type: Embed Video Player */
+          <div className="video-player-card">
+            <div className="video-iframe-wrap">
+              <iframe
+                src={getEmbedUrl(activeResource)}
+                title={activeResource.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                className="video-iframe"
+              />
+            </div>
+
+            <div className="video-player-footer">
+              <div className="playlist-meta">
+                <span className="meta-item">
+                  <strong>Platform:</strong> {activeResource.platform || 'YouTube'}
+                </span>
+                {activeResource.playlistId && (
+                  <span className="meta-item">
+                    <strong>Type:</strong> Full Series Playlist
+                  </span>
+                )}
+                <span className="meta-item">
+                  <strong>Current Subtopic:</strong> {subtopic.title}
+                </span>
+              </div>
+
+              {activeResource.tags && (
+                <div className="resource-tags-row">
+                  {activeResource.tags.map((tag, idx) => (
+                    <span key={idx} className="resource-tag-pill">
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Side-by-side Note Taking Scratchpad */}
         {showNotesDrawer && (

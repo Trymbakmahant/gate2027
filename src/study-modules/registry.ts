@@ -1,6 +1,7 @@
 import { TopicModule } from './types';
 import { linearRegressionModule } from './topics/machine-learning/linear-regression';
 import { supervisedFormulationModule } from './topics/machine-learning/supervised-formulation';
+import { matricesModule } from './topics/linear-algebra/matrices';
 
 // Internal module dictionary
 const MODULE_REGISTRY: Record<string, TopicModule> = {};
@@ -15,6 +16,9 @@ export function registerTopicModule(module: TopicModule): void {
 // Pre-register existing modules
 registerTopicModule(linearRegressionModule);
 registerTopicModule(supervisedFormulationModule);
+registerTopicModule(matricesModule);
+// Alias so both "matrices" and "matrices-types-properties" resolve seamlessly
+MODULE_REGISTRY['matrices-types-properties'] = matricesModule;
 
 /**
  * Retrieve a registered topic module by its syllabus subtopic ID.

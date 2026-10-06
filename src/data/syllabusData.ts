@@ -4,11 +4,14 @@
  * Organizing Institute: IIT Madras
  */
 
+import { MATRICES_MASTER_NOTES_MD } from '@/study-modules/topics/linear-algebra/matrices/matricesNotes';
+
 export interface SyllabusSubtopic {
   id: string;
   title: string;
   keyTerms?: string[];
   notes?: string; // Kept empty for step-by-step user learning
+  learningResources?: LearningResource[];
 }
 
 export interface LearningResource {
@@ -123,7 +126,56 @@ export const GATE_DA_SYLLABUS: SyllabusSection[] = [
     subtopics: [
       { id: "vector-space-subspaces", title: "Vector Space & Subspaces" },
       { id: "linear-dependence-independence", title: "Linear Dependence & Independence of Vectors" },
-      { id: "matrices-types-properties", title: "Matrices & Matrix Operations" },
+      {
+        id: "matrices",
+        title: "Matrices",
+        notes: MATRICES_MASTER_NOTES_MD,
+        keyTerms: [
+          "Matrix definition & order",
+          "Types of matrices",
+          "Matrix addition & scalar multiplication",
+          "Matrix multiplication (compatibility)",
+          "Transpose properties (AB)^T = B^T A^T",
+          "Symmetric & skew-symmetric matrices",
+          "Trace properties",
+          "Orthogonal matrices"
+        ],
+        learningResources: [
+          {
+            id: "gfg-intro-to-matrices",
+            title: "Introduction to Matrices — Complete Revision Guide",
+            url: "https://www.geeksforgeeks.org/maths/introduction-to-matrices/",
+            type: "article",
+            author: "GeeksforGeeks",
+            platform: "GeeksforGeeks",
+            description:
+              "Official GeeksforGeeks comprehensive revision guide covering matrix definition, order, types of matrices (Row, Column, Square, Diagonal, Scalar, Identity, Zero, Symmetric, Skew-Symmetric), matrix operations, and transpose properties for GATE DA.",
+            tags: ["Revision Link", "Matrices", "Linear Algebra", "GeeksforGeeks", "Tier S"]
+          },
+          {
+            id: "gfg-types-of-matrices",
+            title: "Types of Matrices — Complete Classification",
+            url: "https://www.geeksforgeeks.org/maths/types-of-matrices/",
+            type: "article",
+            author: "GeeksforGeeks",
+            platform: "GeeksforGeeks",
+            description:
+              "Comprehensive breakdown of 18 matrix types: Row, Column, Rectangular, Square, Diagonal, Zero, Identity, Symmetric, Skew-Symmetric, Orthogonal, Idempotent, and Involutory matrices.",
+            tags: ["Types of Matrices", "Linear Algebra", "GeeksforGeeks"]
+          },
+          {
+            id: "gfg-solved-matrices-practice",
+            title: "Solved Examples & Practice Questions on Matrices",
+            url: "https://www.geeksforgeeks.org/maths/practice-questions-on-matrices/",
+            type: "article",
+            author: "GeeksforGeeks",
+            platform: "GeeksforGeeks",
+            description:
+              "Step-by-step solved GATE & engineering math questions covering matrix operations, determinant evaluation, adjoint computation, inverses, and rank determination.",
+            tags: ["Practice", "Solved Questions", "GeeksforGeeks"]
+          }
+        ]
+      },
       { id: "special-matrices", title: "Special Matrices: Projection, Orthogonal, Idempotent, Partition Matrices" },
       { id: "quadratic-forms", title: "Quadratic Forms & Definiteness" },
       { id: "systems-linear-equations", title: "Systems of Linear Equations & Consistency" },

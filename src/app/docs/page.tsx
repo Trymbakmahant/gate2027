@@ -476,7 +476,11 @@ export default function DocsPage() {
               section={currentSection}
               subtopic={currentSubtopic}
               themeMode={currentTheme}
-              userNote={userNotes[selectedSubtopicId] || ''}
+              userNote={
+                userNotes[selectedSubtopicId] !== undefined
+                  ? userNotes[selectedSubtopicId]
+                  : currentSubtopic.notes || ''
+              }
               onSaveNote={handleNoteChange}
               isSavingNote={isSavingNotes}
             />

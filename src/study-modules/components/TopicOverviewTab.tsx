@@ -19,7 +19,8 @@ export default function TopicOverviewTab({
   onSelectTab,
   themeMode
 }: TopicOverviewTabProps) {
-  const learningResources = module?.learningResources || section.learningResources || [];
+  const learningResources =
+    module?.learningResources || subtopic.learningResources || section.learningResources || [];
 
   return (
     <div className="topic-overview-container">
@@ -50,8 +51,12 @@ export default function TopicOverviewTab({
               className="hero-action-btn video"
               onClick={() => onSelectTab('resources')}
             >
-              <span>▶</span>
-              <span>Watch Video Playlist</span>
+              <span>{learningResources[0].type === 'article' ? '📖' : '▶'}</span>
+              <span>
+                {learningResources[0].type === 'article'
+                  ? 'Open Revision Guide'
+                  : 'Watch Video Playlist'}
+              </span>
             </button>
           )}
 
@@ -104,34 +109,78 @@ export default function TopicOverviewTab({
         <div className="learning-material-card">
           <div className="learning-material-content">
             <div className="mat-badge-row">
-              <span className="yt-badge">▶ YouTube Learning Material</span>
-              <span className="mat-curated-badge">Recommended Video Course</span>
+              {learningResources[0].type === 'article' ? (
+                <>
+                  <span className="yt-badge" style={{ background: '#059669', borderColor: '#047857' }}>
+                    📖 Revision Guide Article
+                  </span>
+                  <span className="mat-curated-badge">
+                    {learningResources[0].platform || 'GeeksforGeeks'} Master Resource
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span className="yt-badge">▶ YouTube Learning Material</span>
+                  <span className="mat-curated-badge">Recommended Video Course</span>
+                </>
+              )}
             </div>
             <h3 className="mat-title">{learningResources[0].title}</h3>
             {learningResources[0].author && (
               <div className="mat-author">
-                Instructor: <strong>{learningResources[0].author}</strong> • Platform: <strong>{learningResources[0].platform || 'YouTube'}</strong>
+                Source: <strong>{learningResources[0].author}</strong> • Platform:{' '}
+                <strong>{learningResources[0].platform || 'Web'}</strong>
               </div>
             )}
             <p className="mat-desc">{learningResources[0].description}</p>
           </div>
 
           <div className="learning-material-actions">
-            <button
-              type="button"
-              className="mat-play-btn"
-              onClick={() => onSelectTab('resources')}
-            >
-              <span>▶ Watch Inside App Theater</span>
-            </button>
-            <a
-              href={learningResources[0].url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mat-yt-link-btn"
-            >
-              <span>Open on YouTube ↗</span>
-            </a>
+            {learningResources[0].type === 'article' ? (
+              <>
+                <a
+                  href={learningResources[0].url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mat-play-btn"
+                  style={{
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: '#059669',
+                    borderColor: '#047857',
+                  }}
+                >
+                  <span>🔗 Open Revision Guide ↗</span>
+                </a>
+                <button
+                  type="button"
+                  className="mat-yt-link-btn"
+                  onClick={() => onSelectTab('resources')}
+                >
+                  <span>Read in Study Theater 📖</span>
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  className="mat-play-btn"
+                  onClick={() => onSelectTab('resources')}
+                >
+                  <span>▶ Watch Inside App Theater</span>
+                </button>
+                <a
+                  href={learningResources[0].url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mat-yt-link-btn"
+                >
+                  <span>Open on YouTube ↗</span>
+                </a>
+              </>
+            )}
           </div>
         </div>
       )}

@@ -38,8 +38,9 @@ export default function FastTrackCalendarPage() {
     } catch (e) {}
   };
 
-  // Pacing configuration
-  const [lecturesPerDay, setLecturesPerDay] = useState<number>(3); // Default 3 lecs/day (High Pace)
+  // Pacing & Strategy configuration
+  const [lecturesPerDay, setLecturesPerDay] = useState<number>(3); // Default 3 lecs/day (~7.5 hrs) or 2 lecs/day (~5.0 hrs)
+  const [trackMode, setTrackMode] = useState<'interleaved' | 'sequential'>('interleaved'); // Default: Curious Mind Interleaved
   const [activeView, setActiveView] = useState<'month' | 'agenda' | 'roadmap'>('month');
   const [selectedSubjectFilter, setSelectedSubjectFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -72,15 +73,15 @@ export default function FastTrackCalendarPage() {
   // Selected Day for Detail Drawer / Modal
   const [selectedDayModal, setSelectedDayModal] = useState<DayCalendarSchedule | null>(null);
 
-  // Compute optimized schedule based on pace
+  // Compute optimized schedule based on pace & pedagogical track mode
   const calendarData = useMemo(() => {
     return generateOptimizedCalendar({
       lecturesPerDay,
       startDateStr: '2026-10-06',
       targetExamDateStr: '2027-02-06',
-      trackMode: 'sequential',
+      trackMode,
     });
-  }, [lecturesPerDay]);
+  }, [lecturesPerDay, trackMode]);
 
   const allLectures = useMemo(() => getAllOrderedLectures(), []);
   const totalLecturesCount = allLectures.length; // 195
@@ -213,14 +214,15 @@ export default function FastTrackCalendarPage() {
     }
   };
 
-  // Format date helper
-  const formatDateDisplay = (dateStr: string) => {
+  // Format date helper without UTC timezone shift
+  const formatDateDisplay = (dateStr: string, includeYear: boolean = false) => {
     try {
-      const d = new Date(dateStr + 'T00:00:00');
-      return d.toLocaleDateString('en-US', {
-        weekday: 'short',
+      const [y, m, d] = dateStr.split('-').map(Number);
+      const dateObj = new Date(y, m - 1, d);
+      return dateObj.toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
+        ...(includeYear ? { year: 'numeric' } : {}),
       });
     } catch {
       return dateStr;
@@ -303,6 +305,47 @@ export default function FastTrackCalendarPage() {
             </div>
           </div>
 
+          {/* Strategy Mode Toggle (Curious Mind vs Single Subject) */}
+          <div className="cal-strategy-card">
+            <div className="strategy-card-header">
+              <span className="cal-control-tag">COGNITIVE STRATEGY (CURIOSITY & RETENTION)</span>
+              <h3 className="strategy-heading">Study 2–3 Non-Overlapping Subjects Daily or 1 Single Subject?</h3>
+            </div>
+            <div className="strategy-toggle-grid">
+              <button
+                type="button"
+                className={`strategy-toggle-card ${trackMode === 'interleaved' ? 'active' : ''}`}
+                onClick={() => setTrackMode('interleaved')}
+              >
+                <div className="strategy-badge rec">🧠 CURIOUS MIND MODE (RECOMMENDED)</div>
+                <div className="strategy-toggle-title">🔀 2–3 Non-Overlapping Streams Daily</div>
+                <p className="strategy-toggle-desc">
+                  Watch <strong>Math</strong> in the morning, <strong>CS / Python</strong> in the afternoon, and <strong>AI / ML</strong> in the evening. Eliminates mental fatigue, resets attention span, and prevents knowledge interference!
+                </p>
+                <div className="strategy-streams-preview">
+                  <span className="stream-pill math">📐 Stream 1: Math (Linear Alg → Calc → Prob & Stats)</span>
+                  <span className="stream-pill cs">💻 Stream 2: Systems (Python DS → DBMS)</span>
+                  <span className="stream-pill aiml">🤖 Stream 3: AI & ML (Machine Learning → AI)</span>
+                </div>
+              </button>
+
+              <button
+                type="button"
+                className={`strategy-toggle-card ${trackMode === 'sequential' ? 'active' : ''}`}
+                onClick={() => setTrackMode('sequential')}
+              >
+                <div className="strategy-badge mono">🎯 SINGLE-SUBJECT FOCUS</div>
+                <div className="strategy-toggle-title">1 Subject at a Time (Sequential)</div>
+                <p className="strategy-toggle-desc">
+                  Watch lectures from only 1 single subject until all its lectures are finished before moving to the next subject in dependency order.
+                </p>
+                <div className="strategy-streams-preview">
+                  <span className="stream-pill seq">Linear Alg (20) → Calc (16) → Stats (30) → DS (33) → DBMS (15) → ML (43) → AI (38)</span>
+                </div>
+              </button>
+            </div>
+          </div>
+
           <div className="pacing-cards-grid">
             {/* 4 Lectures / Day: Ultra Sprint */}
             <button
@@ -310,9 +353,9 @@ export default function FastTrackCalendarPage() {
               className={`pace-card ${lecturesPerDay === 4 ? 'active' : ''}`}
               onClick={() => setLecturesPerDay(4)}
             >
-              <div className="pace-badge ultra">⚡ ULTRA SPRINT</div>
+              <div className="pace-badge ultra">⚡ ULTRA FULL-TIME SPRINT</div>
               <div className="pace-number">4 Lectures / Day</div>
-              <div className="pace-time">~5.5 – 6.0 Hours / Day</div>
+              <div className="pace-time">⏱️ 10.0 Hours Daily (~2.5h each)</div>
               <div className="pace-finish">
                 Finishes: <strong>Nov 23, 2026</strong> (49 Days)
               </div>
@@ -327,9 +370,9 @@ export default function FastTrackCalendarPage() {
               className={`pace-card ${lecturesPerDay === 3 ? 'active' : ''}`}
               onClick={() => setLecturesPerDay(3)}
             >
-              <div className="pace-badge rec">🚀 RECOMMENDED BEST</div>
+              <div className="pace-badge rec">🚀 RECOMMENDED POWER PACE</div>
               <div className="pace-number">3 Lectures / Day</div>
-              <div className="pace-time">~4.0 – 4.5 Hours / Day</div>
+              <div className="pace-time">⏱️ 7.5 Hours Daily (~2.5h each)</div>
               <div className="pace-finish">
                 Finishes: <strong>Dec 09, 2026</strong> (65 Days)
               </div>
@@ -344,9 +387,9 @@ export default function FastTrackCalendarPage() {
               className={`pace-card ${lecturesPerDay === 2 ? 'active' : ''}`}
               onClick={() => setLecturesPerDay(2)}
             >
-              <div className="pace-badge steady">🎯 STEADY INTENSIVE</div>
+              <div className="pace-badge steady">🎯 BALANCED INTENSIVE</div>
               <div className="pace-number">2 Lectures / Day</div>
-              <div className="pace-time">~2.5 – 3.0 Hours / Day</div>
+              <div className="pace-time">⏱️ 5.0 Hours Daily (~2.5h each)</div>
               <div className="pace-finish">
                 Finishes: <strong>Jan 11, 2027</strong> (98 Days)
               </div>
@@ -360,7 +403,7 @@ export default function FastTrackCalendarPage() {
               <div className="pace-badge custom">⚙️ CUSTOM PACE</div>
               <div className="pace-slider-label">
                 <span>Pace:</span>
-                <strong>{lecturesPerDay} lecs / day</strong>
+                <strong>{lecturesPerDay} lecs ({ (lecturesPerDay * 2.5).toFixed(1) }h / day)</strong>
               </div>
               <input
                 type="range"
@@ -674,7 +717,7 @@ export default function FastTrackCalendarPage() {
                       <div className="agenda-date-group">
                         <span className="agenda-day-num">DAY {day.dayNumber}</span>
                         <h3 className="agenda-date-title">
-                          {day.dayOfWeek}, {formatDateDisplay(day.dateStr)}
+                          {day.dayOfWeek}, {formatDateDisplay(day.dateStr, true)}
                         </h3>
                         {day.isToday && <span className="today-badge-banner">TODAY (OCT 6)</span>}
                       </div>
@@ -737,6 +780,16 @@ export default function FastTrackCalendarPage() {
 
                               <div className="lec-info-block">
                                 <div className="lec-badges-line">
+                                  {lec.streamCategory === 'math' && (
+                                    <span className="lec-stream-tag math">📐 Math</span>
+                                  )}
+                                  {lec.streamCategory === 'cs-systems' && (
+                                    <span className="lec-stream-tag systems">💻 CS / Systems</span>
+                                  )}
+                                  {lec.streamCategory === 'ai-ml' && (
+                                    <span className="lec-stream-tag aiml">🤖 AI & ML</span>
+                                  )}
+                                  <span className="lec-duration-tag">⏱️ 2.5 hrs</span>
                                   <span
                                     className="lec-subject-badge"
                                     style={{
@@ -803,13 +856,63 @@ export default function FastTrackCalendarPage() {
         <section className="cal-roadmap-section">
           <div className="roadmap-header">
             <div>
-              <span className="roadmap-tag">ACCELERATION ROADMAP</span>
-              <h2 className="roadmap-title">Sequential Pedagogical Dependency Schedule</h2>
+              <span className="roadmap-tag">
+                {trackMode === 'interleaved'
+                  ? '🧠 CURIOUS MIND PARALLEL STREAMS'
+                  : '🎯 ACCELERATION ROADMAP'}
+              </span>
+              <h2 className="roadmap-title">
+                {trackMode === 'interleaved'
+                  ? '3 Non-Overlapping Cognitive Streams in Parallel'
+                  : 'Sequential Pedagogical Dependency Schedule'}
+              </h2>
               <p className="roadmap-desc">
-                Calculated based on your selected pace of <strong>{lecturesPerDay} lectures per day</strong>.
+                Calculated based on your selected pace of{' '}
+                <strong>
+                  {lecturesPerDay} lectures ({(lecturesPerDay * 2.5).toFixed(1)}h video) per day
+                </strong>
+                .
               </p>
             </div>
           </div>
+
+          {trackMode === 'interleaved' && (
+            <div className="interleaved-roadmap-guide">
+              <span className="cal-control-tag">WHY THESE 3 STREAMS DON&apos;T INTERFERE:</span>
+              <p className="roadmap-desc">
+                Each stream exercises a completely distinct cognitive pathway. Switching between them prevents mental fatigue, boosts retention, and keeps your curiosity peak high!
+              </p>
+              <div className="roadmap-streams-summary">
+                <div className="stream-summary-box">
+                  <span className="stream-summary-title" style={{ color: '#6d28d9' }}>
+                    📐 Stream 1: Math Foundations (66 Lecs)
+                  </span>
+                  <p className="stream-summary-desc">
+                    Linear Algebra (20) → Calculus &amp; Opt (16) → Probability &amp; Stats (30).
+                    Rigorous deductive reasoning, matrix algebra, and vector spaces.
+                  </p>
+                </div>
+                <div className="stream-summary-box">
+                  <span className="stream-summary-title" style={{ color: '#15803d' }}>
+                    💻 Stream 2: Algorithmic Systems (48 Lecs)
+                  </span>
+                  <p className="stream-summary-desc">
+                    Python Data Structures (33) → DBMS (15).
+                    Procedural programming, tree traversal, SQL schemas, and normalization.
+                  </p>
+                </div>
+                <div className="stream-summary-box">
+                  <span className="stream-summary-title" style={{ color: '#be185d' }}>
+                    🤖 Stream 3: Core AI &amp; ML (81 Lecs)
+                  </span>
+                  <p className="stream-summary-desc">
+                    Machine Learning (43) → Artificial Intelligence (38).
+                    Empirical modeling, gradient descent, loss functions, and heuristic search.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="milestones-timeline-grid">
             {calendarData.milestones.map((m, idx) => {
@@ -893,7 +996,7 @@ export default function FastTrackCalendarPage() {
               <div>
                 <span className="cal-modal-daytag">DAY {selectedDayModal.dayNumber} OF 124</span>
                 <h3 className="cal-modal-title">
-                  {selectedDayModal.dayOfWeek}, {formatDateDisplay(selectedDayModal.dateStr)}
+                  {selectedDayModal.dayOfWeek}, {formatDateDisplay(selectedDayModal.dateStr, true)}
                 </h3>
               </div>
               <button
@@ -932,6 +1035,16 @@ export default function FastTrackCalendarPage() {
                           </label>
                           <div className="modal-lec-detail">
                             <div className="modal-lec-badges">
+                              {lec.streamCategory === 'math' && (
+                                <span className="lec-stream-tag math">📐 Math</span>
+                              )}
+                              {lec.streamCategory === 'cs-systems' && (
+                                <span className="lec-stream-tag systems">💻 CS / Systems</span>
+                              )}
+                              {lec.streamCategory === 'ai-ml' && (
+                                <span className="lec-stream-tag aiml">🤖 AI & ML</span>
+                              )}
+                              <span className="lec-duration-tag">⏱️ 2.5 hrs</span>
                               <span
                                 className="modal-sub-tag"
                                 style={{

@@ -1,11 +1,16 @@
 /**
  * Calendar Optimizer Engine for GATE DA 2027
- * Sequences all 195 pre-recorded lectures in optimal pedagogical dependency order,
- * computes dynamic fast-track daily schedules starting from October 6, 2026,
- * and builds the Mock Test Runway up to GATE Exam Day (February 6, 2027).
+ * Sequences all 195 pre-recorded lectures (each ~2.5 hours) in optimal pedagogical order.
+ * Supports:
+ * 1. Multi-Subject Interleaving Mode ("Curious Mind"): 2-3 non-overlapping streams daily
+ *    (Math Stream + CS/Coding Stream + Applied AI/ML Stream) to prevent mental fatigue & interference.
+ * 2. Single-Subject Sequential Mode: Complete one subject at a time.
+ * Calculates dynamic fast-track daily schedules starting from October 6, 2026.
  */
 
 import lecturePlannersData from './lecturePlanners.json';
+
+export const LECTURE_DURATION_HOURS = 2.5; // Each pre-recorded lecture is ~2.5 hours
 
 export interface OptimizedLecture {
   id: string; // e.g. "linearAlgebra-lec-1"
@@ -15,11 +20,13 @@ export interface OptimizedLecture {
   chapter: string;
   topic?: string;
   timing?: string;
+  durationHours: number; // 2.5 hours
   dpp: string | null;
   test: string | null;
   badgeColor: string;
   badgeBg: string;
   orderIndex: number; // 1 to 195
+  streamCategory: 'math' | 'cs-systems' | 'ai-ml';
 }
 
 export interface DayCalendarSchedule {
@@ -32,6 +39,7 @@ export interface DayCalendarSchedule {
   isToday: boolean;
   phase: 'lectures' | 'mock-phase';
   lectures: OptimizedLecture[];
+  totalStudyHours: number;
   milestones: string[];
   mockActivity?: {
     title: string;
@@ -54,28 +62,40 @@ export interface SubjectMilestone {
 }
 
 export interface PacingConfig {
-  lecturesPerDay: number; // e.g. 2, 3, 4, 5
+  lecturesPerDay: number; // e.g. 2, 3, 4
   startDateStr: string; // "2026-10-06"
   targetExamDateStr: string; // "2027-02-06"
-  trackMode: 'sequential' | 'balanced'; // sequential = finish subject by subject, balanced = alternate math & AI/CS
+  trackMode: 'interleaved' | 'sequential'; // interleaved = multi-subject curious mind, sequential = one subject at a time
 }
 
 export const SUBJECT_METADATA: Record<
   string,
-  { name: string; badgeBg: string; badgeColor: string; priority: string; description: string }
+  {
+    name: string;
+    badgeBg: string;
+    badgeColor: string;
+    priority: string;
+    stream: 'math' | 'cs-systems' | 'ai-ml';
+    streamTitle: string;
+    description: string;
+  }
 > = {
   linearAlgebra: {
     name: 'Linear Algebra',
     badgeBg: '#ede9fe',
     badgeColor: '#6d28d9',
     priority: 'Bedrock Math',
-    description: 'Matrices, Vector Spaces, Eigenvalues & SVD (Prerequisite for ML)',
+    stream: 'math',
+    streamTitle: 'Stream 1: Mathematical Foundations',
+    description: 'Matrices, Vector Spaces, Eigenvalues & SVD (Essential for ML)',
   },
   calculusAndOptimization: {
     name: 'Calculus & Optimization',
     badgeBg: '#fef3c7',
     badgeColor: '#b45309',
     priority: 'Core Math',
+    stream: 'math',
+    streamTitle: 'Stream 1: Mathematical Foundations',
     description: 'Maxima/Minima, Gradient, Hessian & Optimization (Prerequisite for Loss Optimization)',
   },
   probabilityAndStatistics: {
@@ -83,6 +103,8 @@ export const SUBJECT_METADATA: Record<
     badgeBg: '#ffe4e6',
     badgeColor: '#be123c',
     priority: 'High Weightage',
+    stream: 'math',
+    streamTitle: 'Stream 1: Mathematical Foundations',
     description: 'Random Variables, Distributions & Bayes Rule (Critical for ML & AI)',
   },
   dataStructuresPython: {
@@ -90,6 +112,8 @@ export const SUBJECT_METADATA: Record<
     badgeBg: '#dcfce7',
     badgeColor: '#15803d',
     priority: 'Core Coding',
+    stream: 'cs-systems',
+    streamTitle: 'Stream 2: Algorithms & Data Systems',
     description: 'Arrays, Stacks, Queues, Trees & Hash Tables (Foundation for Search Algorithms)',
   },
   dbms: {
@@ -97,6 +121,8 @@ export const SUBJECT_METADATA: Record<
     badgeBg: '#e0f2fe',
     badgeColor: '#0369a1',
     priority: 'Quick Scoring',
+    stream: 'cs-systems',
+    streamTitle: 'Stream 2: Algorithms & Data Systems',
     description: 'ER Models, Relational Algebra, SQL, Normalization & Indexing',
   },
   machineLearning: {
@@ -104,6 +130,8 @@ export const SUBJECT_METADATA: Record<
     badgeBg: '#fce7f3',
     badgeColor: '#be185d',
     priority: 'Top Weightage',
+    stream: 'ai-ml',
+    streamTitle: 'Stream 3: Core AI & Machine Learning',
     description: 'Regression, Classification, SVM, Decision Trees, MLPs & Clustering',
   },
   artificialIntelligence: {
@@ -111,22 +139,73 @@ export const SUBJECT_METADATA: Record<
     badgeBg: '#e0e7ff',
     badgeColor: '#4338ca',
     priority: 'Core DA',
+    stream: 'ai-ml',
+    streamTitle: 'Stream 3: Core AI & Machine Learning',
     description: 'Uninformed/Informed Search, Adversarial Search & Propositional Logic',
   },
 };
 
 /**
- * Extract all 195 lectures in pedagogical order:
- * 1. Linear Algebra (20)
- * 2. Calculus & Optimization (16)
- * 3. Probability & Statistics (30)
- * 4. Data Structures Through Python (33)
- * 5. DBMS (15)
- * 6. Machine Learning (43)
- * 7. Artificial Intelligence (38)
+ * Format local date without any UTC offset shift.
+ */
+export function formatLocalDateStr(d: Date): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+/**
+ * Parse YYYY-MM-DD string into a safe local Date (noon eliminates any timezone issues)
+ */
+export function parseYMD(dateStr: string): Date {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  return new Date(y, m - 1, d, 12, 0, 0);
+}
+
+/**
+ * Extract all 195 lectures from lecturePlanners.json.
+ */
+export function getAllSubjectLectures(subjectKey: string): OptimizedLecture[] {
+  const subjectsData = (lecturePlannersData as any).subjects;
+  const subObj = subjectsData[subjectKey];
+  if (!subObj || !subObj.schedule) return [];
+
+  const meta = SUBJECT_METADATA[subjectKey] || {
+    name: subObj.subject,
+    badgeBg: '#f4f4f5',
+    badgeColor: '#18181b',
+    stream: 'math' as const,
+    streamTitle: 'General',
+  };
+
+  const list: OptimizedLecture[] = [];
+  for (const session of subObj.schedule) {
+    if (!session.lectureNumber) continue;
+    list.push({
+      id: `${subjectKey}-lec-${session.lectureNumber}`,
+      subjectKey,
+      subjectName: meta.name,
+      lectureNumber: session.lectureNumber,
+      chapter: session.chapter || 'Core Module',
+      topic: session.topic,
+      timing: session.timing,
+      durationHours: LECTURE_DURATION_HOURS,
+      dpp: session.dpp || null,
+      test: session.test || null,
+      badgeColor: meta.badgeColor,
+      badgeBg: meta.badgeBg,
+      orderIndex: 0,
+      streamCategory: meta.stream,
+    });
+  }
+  return list;
+}
+
+/**
+ * Returns all 195 lectures ordered sequentially.
  */
 export function getAllOrderedLectures(): OptimizedLecture[] {
-  const subjectsData = (lecturePlannersData as any).subjects;
   const orderedSubjectKeys = [
     'linearAlgebra',
     'calculusAndOptimization',
@@ -137,43 +216,22 @@ export function getAllOrderedLectures(): OptimizedLecture[] {
     'artificialIntelligence',
   ];
 
-  const allLectures: OptimizedLecture[] = [];
-  let globalIndex = 1;
-
-  for (const subKey of orderedSubjectKeys) {
-    const subObj = subjectsData[subKey];
-    if (!subObj || !subObj.schedule) continue;
-
-    const meta = SUBJECT_METADATA[subKey] || {
-      name: subObj.subject,
-      badgeBg: '#f4f4f5',
-      badgeColor: '#18181b',
-    };
-
-    for (const session of subObj.schedule) {
-      if (!session.lectureNumber) continue;
-      allLectures.push({
-        id: `${subKey}-lec-${session.lectureNumber}`,
-        subjectKey: subKey,
-        subjectName: meta.name,
-        lectureNumber: session.lectureNumber,
-        chapter: session.chapter || 'Core Module',
-        topic: session.topic,
-        timing: session.timing,
-        dpp: session.dpp || null,
-        test: session.test || null,
-        badgeColor: meta.badgeColor,
-        badgeBg: meta.badgeBg,
-        orderIndex: globalIndex++,
-      });
+  const all: OptimizedLecture[] = [];
+  let idx = 1;
+  for (const key of orderedSubjectKeys) {
+    const subLecs = getAllSubjectLectures(key);
+    for (const lec of subLecs) {
+      lec.orderIndex = idx++;
+      all.push(lec);
     }
   }
-
-  return allLectures;
+  return all;
 }
 
 /**
- * Generate calendar schedule from Oct 6, 2026 until Feb 6, 2027
+ * Main schedule generator supporting:
+ * - trackMode: "interleaved" (Curious Mind multi-subject: Math + CS + AI daily)
+ * - trackMode: "sequential" (Single subject focus)
  */
 export function generateOptimizedCalendar(config: PacingConfig): {
   days: DayCalendarSchedule[];
@@ -183,89 +241,199 @@ export function generateOptimizedCalendar(config: PacingConfig): {
   lectureCompletionDateStr: string;
   mockDaysCount: number;
   totalDays: number;
+  trackMode: 'interleaved' | 'sequential';
 } {
-  const allLectures = getAllOrderedLectures();
-  const totalLectures = allLectures.length; // 195
   const pace = Math.max(1, Math.min(6, config.lecturesPerDay));
+  const trackMode = config.trackMode || 'interleaved';
 
-  const startDate = new Date(config.startDateStr + 'T00:00:00');
-  const targetExamDate = new Date(config.targetExamDateStr + 'T00:00:00');
+  const startDate = parseYMD(config.startDateStr);
+  const targetExamDate = parseYMD(config.targetExamDateStr);
 
   const days: DayCalendarSchedule[] = [];
   const milestones: SubjectMilestone[] = [];
 
-  // Track subject start & finish
   const subjectBounds: Record<
     string,
     { startDay?: number; finishDay?: number; startDate?: string; finishDate?: string; count: number }
   > = {};
 
-  let lectureCursor = 0;
+  const todayStr = '2026-10-06'; // Base today per user requirement
+
   let currentDate = new Date(startDate);
   let dayCounter = 1;
 
-  const todayStr = '2026-10-06'; // Base today per requirements
+  if (trackMode === 'interleaved') {
+    // -------------------------------------------------------------
+    // INTERLEAVED MODE: 3 Non-Overlapping Pedagogical Streams
+    // Stream 1 (Math): Linear Algebra (20) -> Calculus (16) -> Prob & Stats (30) [66 lecs]
+    // Stream 2 (CS & Systems): Data Structures Python (33) -> DBMS (15) [48 lecs]
+    // Stream 3 (Applied AI & ML): Machine Learning (43) -> Artificial Intelligence (38) [81 lecs]
+    // -------------------------------------------------------------
+    const stream1: OptimizedLecture[] = [
+      ...getAllSubjectLectures('linearAlgebra'),
+      ...getAllSubjectLectures('calculusAndOptimization'),
+      ...getAllSubjectLectures('probabilityAndStatistics'),
+    ];
+    const stream2: OptimizedLecture[] = [
+      ...getAllSubjectLectures('dataStructuresPython'),
+      ...getAllSubjectLectures('dbms'),
+    ];
+    const stream3: OptimizedLecture[] = [
+      ...getAllSubjectLectures('machineLearning'),
+      ...getAllSubjectLectures('artificialIntelligence'),
+    ];
 
-  // 1. Fill lecture days
-  while (lectureCursor < totalLectures) {
-    const dayStr = currentDate.toISOString().split('T')[0];
-    const dayLectures: OptimizedLecture[] = [];
-    const dayMilestones: string[] = [];
+    let s1Cursor = 0;
+    let s2Cursor = 0;
+    let s3Cursor = 0;
+    const totalAll = stream1.length + stream2.length + stream3.length; // 195
 
-    for (let i = 0; i < pace && lectureCursor < totalLectures; i++) {
-      const lec = allLectures[lectureCursor];
-      dayLectures.push(lec);
+    while (s1Cursor < stream1.length || s2Cursor < stream2.length || s3Cursor < stream3.length) {
+      const dayStr = formatLocalDateStr(currentDate);
+      const dayLectures: OptimizedLecture[] = [];
+      const dayMilestones: string[] = [];
 
-      // Track subject first appearance
-      if (!subjectBounds[lec.subjectKey]) {
-        subjectBounds[lec.subjectKey] = {
-          startDay: dayCounter,
-          startDate: dayStr,
-          count: 0,
-        };
+      // Determine which stream to pull from for each slot of the day
+      for (let slot = 0; slot < pace; slot++) {
+        let picked: OptimizedLecture | null = null;
+
+        // If pace >= 3: Slot 0 = Math (Stream 1), Slot 1 = CS/Systems (Stream 2), Slot 2 = AI/ML (Stream 3)
+        // If pace == 2: Rotate across days so Math, CS, and AI/ML all progress smoothly
+        // If pace == 1: Rotate day-by-day across all 3 streams
+        const targetStreamIndex =
+          pace === 2
+            ? (dayCounter - 1 + slot) % 3
+            : pace === 1
+            ? (dayCounter - 1) % 3
+            : slot % 3;
+
+        if (targetStreamIndex === 0 && s1Cursor < stream1.length) {
+          picked = stream1[s1Cursor++];
+        } else if (targetStreamIndex === 1 && s2Cursor < stream2.length) {
+          picked = stream2[s2Cursor++];
+        } else if (targetStreamIndex === 2 && s3Cursor < stream3.length) {
+          picked = stream3[s3Cursor++];
+        } else {
+          // Fallback: pick from whichever stream still has remaining lectures
+          if (s3Cursor < stream3.length) {
+            picked = stream3[s3Cursor++];
+          } else if (s1Cursor < stream1.length) {
+            picked = stream1[s1Cursor++];
+          } else if (s2Cursor < stream2.length) {
+            picked = stream2[s2Cursor++];
+          }
+        }
+
+        if (picked) {
+          dayLectures.push(picked);
+
+          // Track subject start
+          if (!subjectBounds[picked.subjectKey]) {
+            subjectBounds[picked.subjectKey] = {
+              startDay: dayCounter,
+              startDate: dayStr,
+              count: 0,
+            };
+          }
+          subjectBounds[picked.subjectKey].count++;
+
+          // Check if this subject is now finished
+          const subTotal = (lecturePlannersData as any).subjects[picked.subjectKey]?.totalLectures || 0;
+          if (subjectBounds[picked.subjectKey].count === subTotal && !subjectBounds[picked.subjectKey].finishDay) {
+            subjectBounds[picked.subjectKey].finishDay = dayCounter;
+            subjectBounds[picked.subjectKey].finishDate = dayStr;
+            dayMilestones.push(`🏁 Completed all ${subTotal} lectures of ${picked.subjectName}!`);
+          }
+        }
       }
-      subjectBounds[lec.subjectKey].count++;
 
-      // Check if this was the last lecture of this subject
-      const isLastOfSub =
-        lectureCursor === totalLectures - 1 ||
-        allLectures[lectureCursor + 1].subjectKey !== lec.subjectKey;
-
-      if (isLastOfSub) {
-        subjectBounds[lec.subjectKey].finishDay = dayCounter;
-        subjectBounds[lec.subjectKey].finishDate = dayStr;
-        dayMilestones.push(`🏁 Completed all ${subjectBounds[lec.subjectKey].count} lectures of ${lec.subjectName}!`);
+      const totalDoneSoFar = s1Cursor + s2Cursor + s3Cursor;
+      if (totalDoneSoFar === totalAll) {
+        dayMilestones.push('🚀 ALL 195 PRE-RECORDED LECTURES COMPLETED! FULL MOCK RUNWAY UNLOCKED!');
       }
 
-      lectureCursor++;
+      days.push({
+        dateStr: dayStr,
+        dateObj: new Date(currentDate),
+        dayNumber: dayCounter,
+        dayOfWeek: currentDate.toLocaleDateString('en-US', { weekday: 'long' }),
+        monthName: currentDate.toLocaleDateString('en-US', { month: 'long' }),
+        dayOfMonth: currentDate.getDate(),
+        isToday: dayStr === todayStr,
+        phase: 'lectures',
+        lectures: dayLectures,
+        totalStudyHours: dayLectures.length * LECTURE_DURATION_HOURS,
+        milestones: dayMilestones,
+      });
+
+      currentDate.setDate(currentDate.getDate() + 1);
+      dayCounter++;
     }
+  } else {
+    // -------------------------------------------------------------
+    // SEQUENTIAL MODE: Complete one subject before next
+    // -------------------------------------------------------------
+    const allLectures = getAllOrderedLectures();
+    let lectureCursor = 0;
+    const totalLectures = allLectures.length;
 
-    if (lectureCursor === totalLectures) {
-      dayMilestones.push('🚀 ALL 195 PRE-RECORDED LECTURES COMPLETED! TRANSITIONING TO MOCK RUNWAY!');
+    while (lectureCursor < totalLectures) {
+      const dayStr = formatLocalDateStr(currentDate);
+      const dayLectures: OptimizedLecture[] = [];
+      const dayMilestones: string[] = [];
+
+      for (let i = 0; i < pace && lectureCursor < totalLectures; i++) {
+        const lec = allLectures[lectureCursor];
+        dayLectures.push(lec);
+
+        if (!subjectBounds[lec.subjectKey]) {
+          subjectBounds[lec.subjectKey] = {
+            startDay: dayCounter,
+            startDate: dayStr,
+            count: 0,
+          };
+        }
+        subjectBounds[lec.subjectKey].count++;
+
+        const isLastOfSub =
+          lectureCursor === totalLectures - 1 ||
+          allLectures[lectureCursor + 1].subjectKey !== lec.subjectKey;
+
+        if (isLastOfSub) {
+          subjectBounds[lec.subjectKey].finishDay = dayCounter;
+          subjectBounds[lec.subjectKey].finishDate = dayStr;
+          dayMilestones.push(`🏁 Completed all ${subjectBounds[lec.subjectKey].count} lectures of ${lec.subjectName}!`);
+        }
+
+        lectureCursor++;
+      }
+
+      if (lectureCursor === totalLectures) {
+        dayMilestones.push('🚀 ALL 195 PRE-RECORDED LECTURES COMPLETED! FULL MOCK RUNWAY UNLOCKED!');
+      }
+
+      days.push({
+        dateStr: dayStr,
+        dateObj: new Date(currentDate),
+        dayNumber: dayCounter,
+        dayOfWeek: currentDate.toLocaleDateString('en-US', { weekday: 'long' }),
+        monthName: currentDate.toLocaleDateString('en-US', { month: 'long' }),
+        dayOfMonth: currentDate.getDate(),
+        isToday: dayStr === todayStr,
+        phase: 'lectures',
+        lectures: dayLectures,
+        totalStudyHours: dayLectures.length * LECTURE_DURATION_HOURS,
+        milestones: dayMilestones,
+      });
+
+      currentDate.setDate(currentDate.getDate() + 1);
+      dayCounter++;
     }
-
-    const daySchedule: DayCalendarSchedule = {
-      dateStr: dayStr,
-      dateObj: new Date(currentDate),
-      dayNumber: dayCounter,
-      dayOfWeek: currentDate.toLocaleDateString('en-US', { weekday: 'long' }),
-      monthName: currentDate.toLocaleDateString('en-US', { month: 'long' }),
-      dayOfMonth: currentDate.getDate(),
-      isToday: dayStr === todayStr,
-      phase: 'lectures',
-      lectures: dayLectures,
-      milestones: dayMilestones,
-    };
-
-    days.push(daySchedule);
-
-    currentDate.setDate(currentDate.getDate() + 1);
-    dayCounter++;
   }
 
   const lectureCompletionDateStr = days[days.length - 1].dateStr;
 
-  // Build subject milestones list
+  // Build subject milestones
   for (const [subKey, bounds] of Object.entries(subjectBounds)) {
     const meta = SUBJECT_METADATA[subKey];
     milestones.push({
@@ -281,7 +449,9 @@ export function generateOptimizedCalendar(config: PacingConfig): {
     });
   }
 
-  // 2. Fill mock phase days until Exam Date
+  // -------------------------------------------------------------
+  // MOCK TEST RUNWAY: From day after lectures until Feb 6, 2027
+  // -------------------------------------------------------------
   const mockPlanActivities = [
     { title: 'Maths Sectional Test 01', type: 'sectional' as const, desc: 'Linear Algebra & Calculus 30-mark timed sectional + notebook logging', hours: 3 },
     { title: 'Probability & Stats Deep Drill', type: 'pyq-review' as const, desc: 'Bivariate RVs & Bayes theorem 2024-2026 PYQs solve', hours: 4 },
@@ -315,7 +485,7 @@ export function generateOptimizedCalendar(config: PacingConfig): {
   let mockDaysCount = 0;
 
   while (currentDate <= targetExamDate) {
-    const dayStr = currentDate.toISOString().split('T')[0];
+    const dayStr = formatLocalDateStr(currentDate);
     const isExamDay = dayStr === config.targetExamDateStr;
 
     const activityTemplate = mockPlanActivities[mockPlanIndex % mockPlanActivities.length];
@@ -337,6 +507,7 @@ export function generateOptimizedCalendar(config: PacingConfig): {
       isToday: dayStr === todayStr,
       phase: 'mock-phase',
       lectures: [],
+      totalStudyHours: isExamDay ? 3.5 : activityTemplate.hours,
       milestones: dayMilestones,
       mockActivity: isExamDay
         ? {
@@ -360,10 +531,11 @@ export function generateOptimizedCalendar(config: PacingConfig): {
   return {
     days,
     milestones,
-    totalLectures,
+    totalLectures: 195,
     lecturesPerDay: pace,
     lectureCompletionDateStr,
     mockDaysCount,
     totalDays: days.length,
+    trackMode,
   };
 }

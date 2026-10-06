@@ -7,6 +7,7 @@ import { TopicWorkspaceTab, AppThemeMode } from '../types';
 import TopicOverviewTab from './TopicOverviewTab';
 import TopicTestQuiz from './TopicTestQuiz';
 import TopicResourcesView from './TopicResourcesView';
+import FormattedNotesView from './FormattedNotesView';
 
 interface TopicWorkspaceViewProps {
   section: SyllabusSection;
@@ -30,13 +31,17 @@ export default function TopicWorkspaceView({
     return getTopicModule(subtopic.id);
   }, [subtopic.id]);
 
-  // Learning resources from module or section
+  // Learning resources from module, subtopic or section
   const learningResources = useMemo(() => {
-    return module?.learningResources || section.learningResources || [];
-  }, [module, section]);
+    return module?.learningResources || subtopic.learningResources || section.learningResources || [];
+  }, [module, subtopic, section]);
 
   // Tab state
   const [activeTab, setActiveTab] = useState<TopicWorkspaceTab>('overview');
+
+  // Notes view mode: 'preview' (formatted markdown reading) vs 'edit' (textarea input)
+  const [notesViewMode, setNotesViewMode] = useState<'preview' | 'edit'>('preview');
+  const [copiedNotes, setCopiedNotes] = useState<boolean>(false);
 
   // When subtopic changes, set default tab
   useEffect(() => {
@@ -60,11 +65,12 @@ export default function TopicWorkspaceView({
     ];
 
     if (learningResources.length > 0) {
+      const isArticle = learningResources[0]?.type === 'article';
       list.push({
         id: 'resources',
-        label: 'Video Lectures',
-        icon: '📺',
-        badge: 'Playlist'
+        label: isArticle ? 'Revision Guide' : 'Video Lectures',
+        icon: isArticle ? '📖' : '📺',
+        badge: isArticle ? 'Article' : 'Playlist'
       });
     }
 
@@ -212,11 +218,64 @@ export default function TopicWorkspaceView({
                 </div>
 
                 <div className="notes-header-actions">
+                  {/* View Mode Toggle */}
+                  <div className="notes-mode-toggle-group">
+                    <button
+                      type="button"
+                      className={`notes-mode-btn ${notesViewMode === 'preview' ? 'active' : ''}`}
+                      onClick={() => setNotesViewMode('preview')}
+                    >
+                      📖 Formatted View
+                    </button>
+                    <button
+                      type="button"
+                      className={`notes-mode-btn ${notesViewMode === 'edit' ? 'active' : ''}`}
+                      onClick={() => setNotesViewMode('edit')}
+                    >
+                      ✍️ Edit Notes
+                    </button>
+                  </div>
+
+                  {/* Copy Markdown Button */}
+                  <button
+                    type="button"
+                    className="notes-action-tool-btn"
+                    onClick={() => {
+                      const textToCopy = userNote || subtopic.notes || '';
+                      navigator.clipboard.writeText(textToCopy);
+                      setCopiedNotes(true);
+                      setTimeout(() => setCopiedNotes(false), 1800);
+                    }}
+                    title="Copy full notes markdown"
+                  >
+                    {copiedNotes ? '✓ Copied' : '📋 Copy'}
+                  </button>
+
+                  {/* Load/Reset Master Notes */}
+                  {subtopic.notes && (
+                    <button
+                      type="button"
+                      className="notes-load-master-btn"
+                      onClick={() => {
+                        if (
+                          !userNote.trim() ||
+                          window.confirm('Replace your current notes with the complete Master Topic Notes?')
+                        ) {
+                          onSaveNote(subtopic.notes || '');
+                        }
+                      }}
+                      title="Load curated master notes"
+                    >
+                      📥 {userNote.trim() ? 'Reset to Master Notes' : 'Load Master Notes'}
+                    </button>
+                  )}
+
                   {isSavingNote ? (
                     <span className="notes-saving-badge">💾 Auto-saving...</span>
                   ) : (
                     <span className="notes-saved-badge">✓ Synced</span>
                   )}
+
                   {userNote.trim() && (
                     <button
                       type="button"
@@ -233,17 +292,49 @@ export default function TopicWorkspaceView({
                 </div>
               </div>
 
-              <textarea
-                className="notes-textarea"
-                rows={12}
-                placeholder={`Jot down your derivations, key formulas, questions you got wrong, or personal mnemonics for ${subtopic.title} here...`}
-                value={userNote}
-                onChange={(e) => onSaveNote(e.target.value)}
-              />
+              {/* Quick load banner if note is empty and subtopic has master notes */}
+              {!userNote.trim() && subtopic.notes && (
+                <div className="empty-notes-master-prompt">
+                  <div className="prompt-left">
+                    <span className="prompt-icon">📘</span>
+                    <div>
+                      <strong>Master Notes Available for {subtopic.title}</strong>
+                      <p>
+                        Load complete revision notes with 18 matrix types, determinant expansion, adjoint/inverse formulas,
+                        and Data Science ML applications.
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    className="load-master-prompt-btn"
+                    onClick={() => onSaveNote(subtopic.notes || '')}
+                  >
+                    📥 Load Complete Master Notes
+                  </button>
+                </div>
+              )}
+
+              {/* Body: Formatted View vs Edit View */}
+              {notesViewMode === 'preview' ? (
+                <div className="notes-preview-wrapper">
+                  <FormattedNotesView markdown={userNote || subtopic.notes || ''} />
+                </div>
+              ) : (
+                <textarea
+                  className="notes-textarea"
+                  rows={16}
+                  placeholder={`Jot down your derivations, key formulas, questions you got wrong, or personal mnemonics for ${subtopic.title} here...`}
+                  value={userNote}
+                  onChange={(e) => onSaveNote(e.target.value)}
+                />
+              )}
 
               <div className="notes-footer-tips">
-                <span>💡 Tip: Keep formulas short. Review your mistake log before tests.</span>
-                <span>Characters: {userNote.length}</span>
+                <span>
+                  💡 Tip: Use Markdown formatting (headings with ##, bullets with -, links with [text](url)).
+                </span>
+                <span>Characters: {(userNote || subtopic.notes || '').length}</span>
               </div>
             </div>
           </div>

@@ -657,7 +657,7 @@ export const MASTER_SCHEDULE: DaySchedule[] = [
     tier: "Tier S",
     topic: "Matrices & Matrix Operations",
     subTopics: ["Matrix multiplication as linear transformation", "Transpose properties (AB)^T = B^T A^T", "Symmetric and skew-symmetric matrices", "Trace properties tr(AB) = tr(BA)"],
-    guidance: "Matrix multiplication is associative but NOT commutative. Master column-picture and row-picture.",
+    guidance: "Matrix multiplication is associative but NOT commutative. Master column-picture and row-picture. 📖 Official Revision Guide: GeeksforGeeks Introduction to Matrices (https://www.geeksforgeeks.org/maths/introduction-to-matrices/)",
     isTest: false,
     isSunday: false,
     suggestedHours: 7
