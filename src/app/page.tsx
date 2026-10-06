@@ -1086,6 +1086,22 @@ export default function GateTrackerApp() {
           <span>Rules & Tier Strategy</span>
         </button>
         <Link
+          href="/calendar"
+          className="tab-btn calendar-nav-tab-btn"
+          title="Open AI Optimized Pre-recorded Lecture Calendar & Mock Runway"
+        >
+          <span>📅 Fast-Track Calendar</span>
+          <span
+            className="tab-pill"
+            style={{
+              background: currentTheme === 'all-black' ? '#143023' : '#dcfce7',
+              color: currentTheme === 'all-black' ? '#86efac' : '#15803d',
+            }}
+          >
+            195 Lecs
+          </span>
+        </Link>
+        <Link
           href="/docs"
           className="tab-btn docs-nav-tab-btn"
           title="Open Official Syllabus Docs & Study Notes Canvas"

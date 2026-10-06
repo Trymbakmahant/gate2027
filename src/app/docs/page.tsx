@@ -160,6 +160,10 @@ export default function DocsPage() {
             <span>← Master Tracker</span>
           </Link>
 
+          <Link href="/calendar" className="back-tracker-btn" title="Open AI Optimized Lecture Calendar">
+            <span>📅 Fast-Track Calendar</span>
+          </Link>
+
           <div className="docs-brand-badge">
             <span className="live-dot"></span>
             <span className="docs-badge-title">GATE DA 2027 • Official Syllabus Docs</span>
