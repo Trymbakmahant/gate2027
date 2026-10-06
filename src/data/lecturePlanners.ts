@@ -42,11 +42,12 @@ export interface LecturePlannersCollection {
     dbms: SubjectLecturePlanner;
     probabilityAndStatistics: SubjectLecturePlanner;
     machineLearning: SubjectLecturePlanner;
+    artificialIntelligence: SubjectLecturePlanner;
   };
 }
 
 export const LECTURE_PLANNERS = lecturePlannersData as unknown as LecturePlannersCollection;
 
-export function getSubjectPlanner(subjectKey: 'dbms' | 'probabilityAndStatistics' | 'machineLearning'): SubjectLecturePlanner {
+export function getSubjectPlanner(subjectKey: 'dbms' | 'probabilityAndStatistics' | 'machineLearning' | 'artificialIntelligence'): SubjectLecturePlanner {
   return LECTURE_PLANNERS.subjects[subjectKey];
 }

@@ -567,6 +567,64 @@
         { "lectureNumber": 42, "chapter": "Multi Layer Perceptron", "date": "Saturday, 27 September 2025", "isoDate": "2025-09-27", "dayOfWeek": "Saturday", "dpp": null, "test": null },
         { "lectureNumber": 43, "chapter": "Unsupervised Learning", "date": "Sunday, 28 September 2025", "isoDate": "2025-09-28", "dayOfWeek": "Sunday", "dpp": "DPP", "test": "WeeklyTest -4" }
       ]
+    },
+    "artificialIntelligence": {
+      "subject": "Artificial Intelligence",
+      "targetExam": "GATE CS & DA",
+      "totalLectures": 38,
+      "totalDpps": 3,
+      "totalTests": 2,
+      "dateRange": {
+        "start": "2025-09-29",
+        "end": "2025-11-18"
+      },
+      "chapters": [
+        { "name": "Un-Informed Search", "lectures": 6 },
+        { "name": "Informed Search", "lectures": 8 },
+        { "name": "Adversarial Search", "lectures": 3 },
+        { "name": "Proposition & Predictive Logic", "lectures": 18 },
+        { "name": "Miscellaneous", "lectures": 3 }
+      ],
+      "schedule": [
+        { "lectureNumber": 1, "chapter": "Un-Informed Search", "date": "Monday, 29 September 2025", "isoDate": "2025-09-29", "dayOfWeek": "Monday", "dpp": null, "test": null },
+        { "lectureNumber": 2, "chapter": "Un-Informed Search", "date": "Tuesday, 30 September 2025", "isoDate": "2025-09-30", "dayOfWeek": "Tuesday", "dpp": null, "test": null },
+        { "lectureNumber": 3, "chapter": "Un-Informed Search", "date": "Wednesday, 1 October 2025", "isoDate": "2025-10-01", "dayOfWeek": "Wednesday", "dpp": "DPP 01", "test": null },
+        { "lectureNumber": 4, "chapter": "Un-Informed Search", "date": "Friday, 3 October 2025", "isoDate": "2025-10-03", "dayOfWeek": "Friday", "dpp": null, "test": null },
+        { "lectureNumber": 5, "chapter": "Un-Informed Search", "date": "Saturday, 4 October 2025", "isoDate": "2025-10-04", "dayOfWeek": "Saturday", "dpp": null, "test": null },
+        { "lectureNumber": 6, "chapter": "Un-Informed Search", "date": "Monday, 6 October 2025", "isoDate": "2025-10-06", "dayOfWeek": "Monday", "dpp": null, "test": null },
+        { "lectureNumber": 7, "chapter": "Informed Search", "date": "Tuesday, 7 October 2025", "isoDate": "2025-10-07", "dayOfWeek": "Tuesday", "dpp": null, "test": null },
+        { "lectureNumber": 8, "chapter": "Informed Search", "date": "Wednesday, 8 October 2025", "isoDate": "2025-10-08", "dayOfWeek": "Wednesday", "dpp": null, "test": null },
+        { "lectureNumber": 9, "chapter": "Informed Search", "date": "Thursday, 9 October 2025", "isoDate": "2025-10-09", "dayOfWeek": "Thursday", "dpp": null, "test": null },
+        { "lectureNumber": 10, "chapter": "Informed Search", "date": "Friday, 10 October 2025", "isoDate": "2025-10-10", "dayOfWeek": "Friday", "dpp": "DPP 01", "test": null },
+        { "lectureNumber": 11, "chapter": "Informed Search", "date": "Saturday, 11 October 2025", "isoDate": "2025-10-11", "dayOfWeek": "Saturday", "dpp": null, "test": "Weekly Test 01 (12 October 2025)" },
+        { "lectureNumber": 12, "chapter": "Informed Search", "date": "Monday, 13 October 2025", "isoDate": "2025-10-13", "dayOfWeek": "Monday", "dpp": null, "test": null },
+        { "lectureNumber": 13, "chapter": "Informed Search", "date": "Tuesday, 14 October 2025", "isoDate": "2025-10-14", "dayOfWeek": "Tuesday", "dpp": null, "test": null },
+        { "lectureNumber": 14, "chapter": "Informed Search", "date": "Wednesday, 15 October 2025", "isoDate": "2025-10-15", "dayOfWeek": "Wednesday", "dpp": null, "test": null },
+        { "lectureNumber": 15, "chapter": "Adversarial Search", "date": "Thursday, 16 October 2025", "isoDate": "2025-10-16", "dayOfWeek": "Thursday", "dpp": null, "test": null },
+        { "lectureNumber": 16, "chapter": "Adversarial Search", "date": "Friday, 17 October 2025", "isoDate": "2025-10-17", "dayOfWeek": "Friday", "dpp": null, "test": null },
+        { "lectureNumber": 17, "chapter": "Adversarial Search", "date": "Friday, 24 October 2025", "isoDate": "2025-10-24", "dayOfWeek": "Friday", "dpp": null, "test": null },
+        { "lectureNumber": 18, "chapter": "Proposition & Predictive Logic", "date": "Saturday, 25 October 2025", "isoDate": "2025-10-25", "dayOfWeek": "Saturday", "dpp": null, "test": null },
+        { "lectureNumber": 19, "chapter": "Proposition & Predictive Logic", "date": "Monday, 27 October 2025", "isoDate": "2025-10-27", "dayOfWeek": "Monday", "dpp": null, "test": null },
+        { "lectureNumber": 20, "chapter": "Proposition & Predictive Logic", "date": "Tuesday, 28 October 2025", "isoDate": "2025-10-28", "dayOfWeek": "Tuesday", "dpp": null, "test": null },
+        { "lectureNumber": 21, "chapter": "Proposition & Predictive Logic", "date": "Wednesday, 29 October 2025", "isoDate": "2025-10-29", "dayOfWeek": "Wednesday", "dpp": null, "test": null },
+        { "lectureNumber": 22, "chapter": "Proposition & Predictive Logic", "date": "Thursday, 30 October 2025", "isoDate": "2025-10-30", "dayOfWeek": "Thursday", "dpp": null, "test": null },
+        { "lectureNumber": 23, "chapter": "Proposition & Predictive Logic", "date": "Friday, 31 October 2025", "isoDate": "2025-10-31", "dayOfWeek": "Friday", "dpp": null, "test": null },
+        { "lectureNumber": 24, "chapter": "Proposition & Predictive Logic", "date": "Saturday, 1 November 2025", "isoDate": "2025-11-01", "dayOfWeek": "Saturday", "dpp": null, "test": null },
+        { "lectureNumber": 25, "chapter": "Proposition & Predictive Logic", "date": "Monday, 3 November 2025", "isoDate": "2025-11-03", "dayOfWeek": "Monday", "dpp": "DPP 01", "test": null },
+        { "lectureNumber": 26, "chapter": "Proposition & Predictive Logic", "date": "Tuesday, 4 November 2025", "isoDate": "2025-11-04", "dayOfWeek": "Tuesday", "dpp": null, "test": null },
+        { "lectureNumber": 27, "chapter": "Proposition & Predictive Logic", "date": "Wednesday, 5 November 2025", "isoDate": "2025-11-05", "dayOfWeek": "Wednesday", "dpp": null, "test": null },
+        { "lectureNumber": 28, "chapter": "Proposition & Predictive Logic", "date": "Thursday, 6 November 2025", "isoDate": "2025-11-06", "dayOfWeek": "Thursday", "dpp": null, "test": null },
+        { "lectureNumber": 29, "chapter": "Proposition & Predictive Logic", "date": "Friday, 7 November 2025", "isoDate": "2025-11-07", "dayOfWeek": "Friday", "dpp": null, "test": null },
+        { "lectureNumber": 30, "chapter": "Proposition & Predictive Logic", "date": "Saturday, 8 November 2025", "isoDate": "2025-11-08", "dayOfWeek": "Saturday", "dpp": null, "test": null },
+        { "lectureNumber": 31, "chapter": "Proposition & Predictive Logic", "date": "Monday, 10 November 2025", "isoDate": "2025-11-10", "dayOfWeek": "Monday", "dpp": null, "test": null },
+        { "lectureNumber": 32, "chapter": "Proposition & Predictive Logic", "date": "Tuesday, 11 November 2025", "isoDate": "2025-11-11", "dayOfWeek": "Tuesday", "dpp": null, "test": null },
+        { "lectureNumber": 33, "chapter": "Proposition & Predictive Logic", "date": "Wednesday, 12 November 2025", "isoDate": "2025-11-12", "dayOfWeek": "Wednesday", "dpp": null, "test": null },
+        { "lectureNumber": 34, "chapter": "Proposition & Predictive Logic", "date": "Thursday, 13 November 2025", "isoDate": "2025-11-13", "dayOfWeek": "Thursday", "dpp": null, "test": null },
+        { "lectureNumber": 35, "chapter": "Proposition & Predictive Logic", "date": "Friday, 14 November 2025", "isoDate": "2025-11-14", "dayOfWeek": "Friday", "dpp": null, "test": "Weekly Test 02 (16 November 2025)" },
+        { "lectureNumber": 36, "chapter": "Miscellaneous", "date": "Saturday, 15 November 2025", "isoDate": "2025-11-15", "dayOfWeek": "Saturday", "dpp": null, "test": null },
+        { "lectureNumber": 37, "chapter": "Miscellaneous", "date": "Monday, 17 November 2025", "isoDate": "2025-11-17", "dayOfWeek": "Monday", "dpp": null, "test": null },
+        { "lectureNumber": 38, "chapter": "Miscellaneous", "date": "Tuesday, 18 November 2025", "isoDate": "2025-11-18", "dayOfWeek": "Tuesday", "dpp": null, "test": null }
+      ]
     }
   }
 }
